@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="Learning Mark">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Tung7">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="如何判断链表有环">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Learning Mark">
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Note">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary">
+    
+
+    <!-- Title -->
+    
+    <title>如何判断链表有环 - Note</title>
+
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap-3.3.6.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="/css/highlight.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- jquery -->
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Tung</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives/">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/category/">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tag/">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/awesome/">
+                            
+                                Awesome
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading" style="user-select:none">
+                    <!-- Tags and categories -->
+                    
+
+                    <h1>如何判断链表有环</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        2019-04-01
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Post Content -->
+<article>
+    <div class="container1">
+        <div class="row1">
+
+            <!-- Post Main Content -->
+            <!--<div class="col-lg-offset-2 col-md-8 col-md-offset-2" id="aritcle_content">-->
+            <div class="col1-md-12 single-inner">
+                <div class="single-left" id="aritcle_content">
+                    <div class="categories-wrp" style="overflow: hidden;">
+                        <!-- Tags and categories -->
+                        
+                            <div class="post-categories">
+                                
+                                    
+
+<a href="/categories/数据结构与算法/"><i class="fa fa-folder"></i> 数据结构与算法</a><span class="categories-slash">/</span><a href="/categories/数据结构与算法/技巧/"><i class="fa fa-folder"></i> 技巧</a>
+
+                                
+                            </div>
+                        
+
+                        <!-- Gallery -->
+                        
+                    </div>
+                    <div class="content-wrp" style="margin-top: -20px">
+                        <h1 id="HashSet法"><a href="#HashSet法" class="headerlink" title="HashSet法"></a>HashSet法</h1><p>迭代链表，每迭代一个元素，判断HashSet中是否存在，存在这说明有环，不存在则将id放入HashSet中，继续迭代，知道结束。</p>
+<h1 id="双重引用法"><a href="#双重引用法" class="headerlink" title="双重引用法"></a>双重引用法</h1><p>用两个变量引用表头，每次循环体内一个变量指向下一节点，一个变量指向下两个节点，然后判断这两个变量的引用对象是否相同。存在相同则有环，不存在相同则一定会在有限时间内结束程序。</p>
+<p>原理就是在一个环形跑道上，其中一个运动员的速度大于另外一个运动员的速度时，就一定会相遇。</p>
+<h2 id="衍生问题"><a href="#衍生问题" class="headerlink" title="衍生问题"></a>衍生问题</h2><p>问题一：判断两个单向链表是否相交，如果相交，求出交点。</p>
+<p><img src="../../../../assets/img/如何判断链表有环.assets/clipboard.png" alt="image"></p>
+<p>把一个链表的尾节点与另外一个链表的头节点相连，然后用双重引用法求。</p>
+
+                        
+                        <div class="col-md-12 copyrightHolder">如无特殊说明皆为原创，版权所有，转载时请注明出处.</div>
+                    </div>
+                    <div class="comment-wrp">
+                        <!-- Comments -->
+                        
+                            <!-- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                                
+
+
+
+
+                            </div> -->
+                        
+                    </div>
+
+                </div>
+
+
+               
+            </div>
+
+
+ <!-- Tocify -->
+                
+                <!-- <div class="single-right"> -->
+                <div class="single-right" style="display: none">
+
+                    <script type="text/javascript" src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+                    <script type="text/javascript" src="/js/jquery.tocify.min.js"></script>
+
+                    <div class="sidebar-wrp catelog-wrp">
+                        <section class="sidebar a_index" id="catalog">
+                            <div class="sidebar-title">目录</div>
+                            <div class="sidebar-content"><div id="toc"></div></div>
+                        </section>
+                    </div>
+
+                    <script type="text/javascript">
+                        //Calls the tocify method on your HTML div.
+                        $(document).ready(function(){
+                            $("#toc").tocify({
+                                context:"#aritcle_content",selectors:"h1,h2,h3,h4,h5",theme:"none",extendPage:false
+                            });
+                        });
+                        var index_offset = 10 + $('.intro-header').height()
+                        $('.single-right').css('top', index_offset).css('display', 'block')
+                        var catalog = $('#catalog')
+                        var oldScrollTop = $(window).scrollTop()
+                        $(window).scroll(function(){
+                            var index_top = $(window).scrollTop()
+                            index_top > index_offset ? $("#catalog").addClass("scroll-fix") : $("#catalog").removeClass("scroll-fix")
+                            var delta = index_top - oldScrollTop
+                            oldScrollTop = index_top;
+                            var sh = document.documentElement.clientHeight;
+                            // ???? delta>0 ? catalog.css("top","0") : (index_top>sh && catalog.css("top","60px"))
+                            // delta>0 ? catalog.css("top","10px") : catalog.css("top","60px")
+                        });
+                    </script>
+                </div>
+                
+
+
+        </div>
+    </div>
+</article>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="mailto:tung7@foxmail.com" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">© 2015 Tung 版权所有 | 粤ICP备15069283号</p>
+            </div>
+        </div>
+    </div>
+    <div class="floatButton">
+      <button type="button" class="btn" id="goTop" title="去顶部">
+        <span class="arrow-up"><i class="fa fa-arrow-up"></i></span>
+      </button>
+      <button type="button" class="btn" id="goBottom" title="去底部">
+        <span class="arrow-down"><i class="fa fa-arrow-down"></i></span>
+      </button>
+    </div>
+    <script>
+        $(document).on("click", "#goTop", function() {
+            $("html,body").animate({
+                scrollTop: "0px"
+            }, 800)
+        }),
+        $(document).on("click", "#goBottom", function() {
+            $("html,body").animate({
+                scrollTop: $("footer").offset().top
+            }, 800)
+        })
+    </script>
+</footer>
+
+    <!-- After footer scripts -->
+    
+<!-- Bootstrap -->
+<script src="//apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdn.bootcss.com/featherlight/1.5.0/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="/js/clean-blog.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

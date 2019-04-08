@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="Learning Mark">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Tung7">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="JDK7的HashMap在多线程下引起的死循环过程分析">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Learning Mark">
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Note">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary">
+    
+
+    <!-- Title -->
+    
+    <title>JDK7的HashMap在多线程下引起的死循环过程分析 - Note</title>
+
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap-3.3.6.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="/css/highlight.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- jquery -->
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Tung</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives/">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/category/">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tag/">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/awesome/">
+                            
+                                Awesome
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading" style="user-select:none">
+                    <!-- Tags and categories -->
+                    
+                        <div class="post-tags">
+                            
+                                
+<a href="/tags/JDK源码/"><i class="fa fa-tag"></i> JDK源码</a>
+
+
+                            
+                        </div>
+                    
+
+                    <h1>JDK7的HashMap在多线程下引起的死循环过程分析</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        2019-04-02
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Post Content -->
+<article>
+    <div class="container1">
+        <div class="row1">
+
+            <!-- Post Main Content -->
+            <!--<div class="col-lg-offset-2 col-md-8 col-md-offset-2" id="aritcle_content">-->
+            <div class="col1-md-12 single-inner">
+                <div class="single-left" id="aritcle_content">
+                    <div class="categories-wrp" style="overflow: hidden;">
+                        <!-- Tags and categories -->
+                        
+                            <div class="post-categories">
+                                
+                                    
+
+<a href="/categories/Java基础/"><i class="fa fa-folder"></i> Java基础</a><span class="categories-slash">/</span><a href="/categories/Java基础/Collection/"><i class="fa fa-folder"></i> Collection</a>
+
+                                
+                            </div>
+                        
+
+                        <!-- Gallery -->
+                        
+                    </div>
+                    <div class="content-wrp" style="margin-top: -20px">
+                        <h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>当HashMap中的数组元素数量越来越多，就越容易引起hash碰撞，从而影响容器的性能，所以HashMap设计成容量达到一定饱和度时（threshold），触发resize机制以对数组扩容。</p>
+<h1 id="resize"><a href="#resize" class="headerlink" title="resize"></a>resize</h1><p>resize过程为：</p>
+<ul>
+<li>创建一个空的新数组，长度为原数组的2倍</li>
+<li>遍历原数组，把所有的Entry元素rehash到新数组</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 按新的容量扩容Hash表  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resize</span><span class="params">(<span class="keyword">int</span> newCapacity)</span> </span>&#123;  </span><br><span class="line">    <span class="comment">// 原数组</span></span><br><span class="line">    Entry[] oldTable = table;</span><br><span class="line">    <span class="keyword">int</span> oldCapacity = oldTable.length;</span><br><span class="line">    <span class="keyword">if</span> (oldCapacity == MAXIMUM_CAPACITY) &#123; </span><br><span class="line">        threshold = Integer.MAX_VALUE; </span><br><span class="line">        <span class="keyword">return</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 新的数组</span></span><br><span class="line">    Entry[] newTable = <span class="keyword">new</span> Entry[newCapacity];  </span><br><span class="line">    <span class="comment">// 将老的表中的数据拷贝到新的结构中  </span></span><br><span class="line">    transfer(newTable, initHashSeedAsNeeded(newCapacity));</span><br><span class="line">    <span class="comment">//修改HashMap的底层数组  </span></span><br><span class="line">    table = newTable;</span><br><span class="line">    <span class="comment">// 处理阀值</span></span><br><span class="line">    threshold = (<span class="keyword">int</span>)Math.min(newCapacity * loadFactor, MAXIMUM_CAPACITY + <span class="number">1</span>);</span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(Entry[] newTable, <span class="keyword">boolean</span> rehash)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">int</span> newCapacity = newTable.length;</span><br><span class="line">    <span class="comment">// 遍历所有buckets</span></span><br><span class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e : table) &#123;</span><br><span class="line">        <span class="comment">// 遍历bucket中所有元素（是一个链表）</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">null</span> != e) &#123;  </span><br><span class="line">            Entry&lt;K,V&gt; next = e.next;  </span><br><span class="line">            <span class="comment">// 如果是重新Hash，则需要重新计算hash值  </span></span><br><span class="line">            <span class="keyword">if</span> (rehash) &#123;</span><br><span class="line">                e.hash = <span class="keyword">null</span> == e.key ? <span class="number">0</span> : hash(e.key);  </span><br><span class="line">            &#125;  </span><br><span class="line">            <span class="comment">// 定位bucket位置  </span></span><br><span class="line">            <span class="keyword">int</span> i = indexFor(e.hash, newCapacity);</span><br><span class="line">            <span class="comment">// 元素连接到bucket中, 头插法</span></span><br><span class="line">            e.next = newTable[i];</span><br><span class="line">            newTable[i] = e;</span><br><span class="line">            </span><br><span class="line">            e = next; <span class="comment">// 继续下一个元素  </span></span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回数组下标</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexFor</span><span class="params">(<span class="keyword">int</span> h, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> h &amp; (length-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="演练"><a href="#演练" class="headerlink" title="演练"></a>演练</h1><p>当两个线程分别插入Entry4,Entry5</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451266833.png" alt="image"></p>
+<p>这时会一起触发resize机制，当线程B遍历table[2]的bucket时，执行完下面所示的代码，然后被挂起了。</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451262010.png" alt="image"></p>
+<p>这时e=Entry3,next=Entry2。</p>
+<p>线程A这时将resize操作执行完了，结果如下(头插法引起倒序)：</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451257785.png" alt="image"></p>
+<p>线程B恢复执行，index继续为3(A线程中Entry3的indexFor结果是3).</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451253050.png" alt="image"></p>
+<p>执行到这里。Entry3头插法放入newTable中。[e=Entry3,next=Entry2] =&gt; [e = Entry2,next=Entry2]。</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451248370.png" alt="image"></p>
+<p>e!=null, 继续执行while循环</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451241962.png" alt="image"></p>
+<p>执行完所示代码后，由于线程A已经改变了Entry3与Entry2的引用，Entry2的next不再是Entry1,而是Entry3。 所以变为[e=Entry2, next=Entry3]。 如下图：</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451238507.png" alt="image"></p>
+<p>后面就是将e:Entry2头插法进入到线程B的newTable。</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451233435.png" alt="image"></p>
+<p>然后e=next。 如下图：</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451229153.png" alt="image"></p>
+<p>这时e!=null, 继续执行while循环。执行完所示代码后，[e=Entry3, next=null]</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451224049.png" alt="image"></p>
+<p>接下来就是继续往newTable里面塞。</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451219841.png" alt="image"></p>
+<p>执行完上面那行代码后，链表出现了环。</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard-1551451215546.png" alt="image"></p>
+<p>之后<code>newTable[i]=e,e=next</code>,e=next=null了就继续下一个bucket了，这个环就一直存在。后续如果线程B的newTable替换了原table。那么在get操作的时候，遍历table[3]就可能会出现死循环（在key hash到索引位置3，且key不是Entry2/Entry3时,就是死循环）</p>
+<p><a href="http://note.youdao.com/noteshare?id=dab9730827fbb709dfdaa2894a3ab47f&amp;sub=E623D50BE23547B68EAAE97955E51C9D" target="_blank" rel="noopener">PPT图</a></p>
+<p>引起这个问题的关键点是：</p>
+<ul>
+<li>头插法<ul>
+<li>一个线程resize之后的引用反向了。</li>
+<li>另外一个线程获取next时重复处理了，再次头插法就直接导致出现环。</li>
+</ul>
+</li>
+</ul>
+<h1 id="JDK8的HashMap是如何避免的"><a href="#JDK8的HashMap是如何避免的" class="headerlink" title="JDK8的HashMap是如何避免的"></a>JDK8的HashMap是如何避免的</h1><p>首先明确一点，jdk8没有专门的去解决这个问题。因为JDK<strong>明确说了多线程环境下不要使用HashMap</strong>。jdk8不出现这个问题是因为没有头插法了。</p>
+<p><img src="../../../../assets/img/JDK7的HashMap在多线程下引起的死循环.assets/clipboard.png" alt="image"></p>
+
+                        
+                        <div class="col-md-12 copyrightHolder">如无特殊说明皆为原创，版权所有，转载时请注明出处.</div>
+                    </div>
+                    <div class="comment-wrp">
+                        <!-- Comments -->
+                        
+                            <!-- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                                
+
+
+
+
+                            </div> -->
+                        
+                    </div>
+
+                </div>
+
+
+               
+            </div>
+
+
+ <!-- Tocify -->
+                
+                <!-- <div class="single-right"> -->
+                <div class="single-right" style="display: none">
+
+                    <script type="text/javascript" src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+                    <script type="text/javascript" src="/js/jquery.tocify.min.js"></script>
+
+                    <div class="sidebar-wrp catelog-wrp">
+                        <section class="sidebar a_index" id="catalog">
+                            <div class="sidebar-title">目录</div>
+                            <div class="sidebar-content"><div id="toc"></div></div>
+                        </section>
+                    </div>
+
+                    <script type="text/javascript">
+                        //Calls the tocify method on your HTML div.
+                        $(document).ready(function(){
+                            $("#toc").tocify({
+                                context:"#aritcle_content",selectors:"h1,h2,h3,h4,h5",theme:"none",extendPage:false
+                            });
+                        });
+                        var index_offset = 10 + $('.intro-header').height()
+                        $('.single-right').css('top', index_offset).css('display', 'block')
+                        var catalog = $('#catalog')
+                        var oldScrollTop = $(window).scrollTop()
+                        $(window).scroll(function(){
+                            var index_top = $(window).scrollTop()
+                            index_top > index_offset ? $("#catalog").addClass("scroll-fix") : $("#catalog").removeClass("scroll-fix")
+                            var delta = index_top - oldScrollTop
+                            oldScrollTop = index_top;
+                            var sh = document.documentElement.clientHeight;
+                            // ???? delta>0 ? catalog.css("top","0") : (index_top>sh && catalog.css("top","60px"))
+                            // delta>0 ? catalog.css("top","10px") : catalog.css("top","60px")
+                        });
+                    </script>
+                </div>
+                
+
+
+        </div>
+    </div>
+</article>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="mailto:tung7@foxmail.com" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">© 2015 Tung 版权所有 | 粤ICP备15069283号</p>
+            </div>
+        </div>
+    </div>
+    <div class="floatButton">
+      <button type="button" class="btn" id="goTop" title="去顶部">
+        <span class="arrow-up"><i class="fa fa-arrow-up"></i></span>
+      </button>
+      <button type="button" class="btn" id="goBottom" title="去底部">
+        <span class="arrow-down"><i class="fa fa-arrow-down"></i></span>
+      </button>
+    </div>
+    <script>
+        $(document).on("click", "#goTop", function() {
+            $("html,body").animate({
+                scrollTop: "0px"
+            }, 800)
+        }),
+        $(document).on("click", "#goBottom", function() {
+            $("html,body").animate({
+                scrollTop: $("footer").offset().top
+            }, 800)
+        })
+    </script>
+</footer>
+
+    <!-- After footer scripts -->
+    
+<!-- Bootstrap -->
+<script src="//apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdn.bootcss.com/featherlight/1.5.0/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="/js/clean-blog.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>

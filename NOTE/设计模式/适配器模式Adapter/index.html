@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="Learning Mark">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Tung7">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="适配器模式Adapter">
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Learning Mark">
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Note">
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article">
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary">
+    
+
+    <!-- Title -->
+    
+    <title>适配器模式Adapter - Note</title>
+
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap-3.3.6.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="/css/highlight.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet">
+
+    <!-- jquery -->
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <!-- Google Analytics -->
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Tung</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives/">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/category/">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tag/">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/awesome/">
+                            
+                                Awesome
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading" style="user-select:none">
+                    <!-- Tags and categories -->
+                    
+
+                    <h1>适配器模式Adapter</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        2019-04-01
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Post Content -->
+<article>
+    <div class="container1">
+        <div class="row1">
+
+            <!-- Post Main Content -->
+            <!--<div class="col-lg-offset-2 col-md-8 col-md-offset-2" id="aritcle_content">-->
+            <div class="col1-md-12 single-inner">
+                <div class="single-left" id="aritcle_content">
+                    <div class="categories-wrp" style="overflow: hidden;">
+                        <!-- Tags and categories -->
+                        
+                            <div class="post-categories">
+                                
+                                    
+
+<a href="/categories/设计模式/"><i class="fa fa-folder"></i> 设计模式</a>
+
+                                
+                            </div>
+                        
+
+                        <!-- Gallery -->
+                        
+                    </div>
+                    <div class="content-wrp" style="margin-top: -20px">
+                        <h1 id="Also-known-as"><a href="#Also-known-as" class="headerlink" title="Also known as"></a>Also known as</h1><p>Wrapper</p>
+<h1 id="Intent"><a href="#Intent" class="headerlink" title="Intent"></a>Intent</h1><p>Convert the interface of a class into another interface the clients expect.</p>
+<p>适配器模式不适合在详细设计阶段使用它，它是一种补偿模式，专用来在系统后期扩展、修改时所用。</p>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><h2 id="Class-Adapter"><a href="#Class-Adapter" class="headerlink" title="Class Adapter"></a>Class Adapter</h2><p><img src="../../../assets/img/适配器模式Adapter.assets/clipboard.png" alt="image"></p>
+<p>More Details:<br><img src="../../../assets/img/适配器模式Adapter.assets/clipboard-1551451666675.png" alt="image"></p>
+<h2 id="Object-Adapter"><a href="#Object-Adapter" class="headerlink" title="Object Adapter"></a>Object Adapter</h2><p>在Object Adapter中，Adapter和Adaptee不是继承关系，而是直接关联的关系（或者说是委托的方式）<br><img src="../../../assets/img/适配器模式Adapter.assets/clipboard-1551451676220.png" alt="image"></p>
+<p>More Details:<br><img src="../../../assets/img/适配器模式Adapter.assets/clipboard-1551451707908.png" alt="image"></p>
+<p>Adapter Code sample:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adapter</span> <span class="keyword">implements</span> <span class="title">Target</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Adaptee adaptee;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Adapter</span><span class="params">(Adaptee adaptee)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.adaptee = adaptee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">do</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// sth else</span></span><br><span class="line">        adaptee.specificDo();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Applicability"><a href="#Applicability" class="headerlink" title="Applicability"></a>Applicability</h1><p>Use the Adapter pattern when </p>
+<ul>
+<li>you want to use <strong>an existing class</strong>, and its interface does not match the one you need</li>
+<li>you want to create a reusable class that cooperates with unrelated or unforeseen classes, that is, classes that don’t necessarily have compatible interfaces</li>
+<li>you need to use <strong>several existing subclasses</strong>, but it’s impractical to adapt their interface by subclassing every one. <strong>An object adapter</strong> can adapt the interface of its parent class.</li>
+<li>most of the applications using third party libraries use adapters as <strong>a middle layer</strong> between the application and the 3rd party library to decouple the application from the library. If another library has to be used only an adapter for the new library is required without having to change the application code.</li>
+</ul>
+<h1 id="Consequences"><a href="#Consequences" class="headerlink" title="Consequences"></a>Consequences</h1><p>Class and object adapters have different trade-offs. </p>
+<p>A class adapter</p>
+<ul>
+<li>adapts Adaptee to Target by committing to a concrete Adaptee class. As a consequence, a class adapter won’t work when we want to adapt a class and all its subclasses.</li>
+<li>let’s Adapter override some of Adaptee’s behavior, since Adapter is a subclass of Adaptee.</li>
+<li>introduces only one object, and no additional pointer indirection is needed to get to the adaptee.</li>
+</ul>
+<p>An object adapter</p>
+<ul>
+<li>let’s a single Adapter work with many Adaptees—that is, the Adaptee itself and all of its subclasses (if any). The Adapter can also add functionality to all Adaptees at once.</li>
+<li>makes it harder to override Adaptee behavior. It will require subclassing Adaptee and making Adapter refer to the subclass rather than the Adaptee itself.</li>
+</ul>
+<p>关键就是：借助一个接口或者类，通过某种方式（关联等）将另外一个不匹配不符合要求的类/接口适配成所需的样子。一般用于已有系统的拓展。</p>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><p>SpringMVC-HandlerAdapter<br>Adapter接口：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HandlerAdapter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">supports</span><span class="params">(Object handler)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">ModelAndView <span class="title">handle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Adaptee - SimpleServletHandlerAdapter:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleServletHandlerAdapter</span> <span class="keyword">implements</span> <span class="title">HandlerAdapter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">supports</span><span class="params">(Object handler)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (handler <span class="keyword">instanceof</span> Servlet);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">handle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ((Servlet) handler).service(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Adaptee - SimpleControllerHandlerAdapter:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleControllerHandlerAdapter</span> <span class="keyword">implements</span> <span class="title">HandlerAdapter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">supports</span><span class="params">(Object handler)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (handler <span class="keyword">instanceof</span> Controller);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">handle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ((Controller) handler).handleRequest(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Adaptee - HttpRequestHandlerAdapter:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpRequestHandlerAdapter</span> <span class="keyword">implements</span> <span class="title">HandlerAdapter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">supports</span><span class="params">(Object handler)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (handler <span class="keyword">instanceof</span> HttpRequestHandler);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">handle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ((HttpRequestHandler) handler).handleRequest(request, response);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Client:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pubilc <span class="class"><span class="keyword">class</span> <span class="title">DispatcherServelet</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doDispatch</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// Determine handler adapter for the current request.</span></span><br><span class="line">        HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// return ModelAndView</span></span><br><span class="line">        mv = ha.handle(processedRequest, response, mappedHandler.getHandler());</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里Adapter与Adaptee是借助一个support方法进行关联。也不存在Target接口。<br>实际上演变成了：<br><img src="../../../assets/img/适配器模式Adapter.assets/clipboard-1551451722340.png" alt="image"><br>具体点就是：<br><img src="../../../assets/img/适配器模式Adapter.assets/clipboard-1551451733022.png" alt="image"><br><img src="../../../assets/img/适配器模式Adapter.assets/clipboard-1551451742604.png" alt="image"></p>
+<p>可以看出，HandlerAdapter是为了适配Controller，Servlet等接口的处理方法的不同。<br>将Controller的handleRequest()，Serlvet的doService()适配成SpringMVC所需的handle():ModelAndView.</p>
+<p><a href="http://note.youdao.com/noteshare?id=bcfb936992cc93822faa7566268899be&amp;sub=4C509928249A49A1B7CD43BA04F6679F" target="_blank" rel="noopener">UML-mdj文件</a></p>
+
+                        
+                        <div class="col-md-12 copyrightHolder">如无特殊说明皆为原创，版权所有，转载时请注明出处.</div>
+                    </div>
+                    <div class="comment-wrp">
+                        <!-- Comments -->
+                        
+                            <!-- <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                                
+
+
+
+
+                            </div> -->
+                        
+                    </div>
+
+                </div>
+
+
+               
+            </div>
+
+
+ <!-- Tocify -->
+                
+                <!-- <div class="single-right"> -->
+                <div class="single-right" style="display: none">
+
+                    <script type="text/javascript" src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+                    <script type="text/javascript" src="/js/jquery.tocify.min.js"></script>
+
+                    <div class="sidebar-wrp catelog-wrp">
+                        <section class="sidebar a_index" id="catalog">
+                            <div class="sidebar-title">目录</div>
+                            <div class="sidebar-content"><div id="toc"></div></div>
+                        </section>
+                    </div>
+
+                    <script type="text/javascript">
+                        //Calls the tocify method on your HTML div.
+                        $(document).ready(function(){
+                            $("#toc").tocify({
+                                context:"#aritcle_content",selectors:"h1,h2,h3,h4,h5",theme:"none",extendPage:false
+                            });
+                        });
+                        var index_offset = 10 + $('.intro-header').height()
+                        $('.single-right').css('top', index_offset).css('display', 'block')
+                        var catalog = $('#catalog')
+                        var oldScrollTop = $(window).scrollTop()
+                        $(window).scroll(function(){
+                            var index_top = $(window).scrollTop()
+                            index_top > index_offset ? $("#catalog").addClass("scroll-fix") : $("#catalog").removeClass("scroll-fix")
+                            var delta = index_top - oldScrollTop
+                            oldScrollTop = index_top;
+                            var sh = document.documentElement.clientHeight;
+                            // ???? delta>0 ? catalog.css("top","0") : (index_top>sh && catalog.css("top","60px"))
+                            // delta>0 ? catalog.css("top","10px") : catalog.css("top","60px")
+                        });
+                    </script>
+                </div>
+                
+
+
+        </div>
+    </div>
+</article>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="mailto:tung7@foxmail.com" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">© 2015 Tung 版权所有 | 粤ICP备15069283号</p>
+            </div>
+        </div>
+    </div>
+    <div class="floatButton">
+      <button type="button" class="btn" id="goTop" title="去顶部">
+        <span class="arrow-up"><i class="fa fa-arrow-up"></i></span>
+      </button>
+      <button type="button" class="btn" id="goBottom" title="去底部">
+        <span class="arrow-down"><i class="fa fa-arrow-down"></i></span>
+      </button>
+    </div>
+    <script>
+        $(document).on("click", "#goTop", function() {
+            $("html,body").animate({
+                scrollTop: "0px"
+            }, 800)
+        }),
+        $(document).on("click", "#goBottom", function() {
+            $("html,body").animate({
+                scrollTop: $("footer").offset().top
+            }, 800)
+        })
+    </script>
+</footer>
+
+    <!-- After footer scripts -->
+    
+<!-- Bootstrap -->
+<script src="//apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdn.bootcss.com/featherlight/1.5.0/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="/js/clean-blog.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
