@@ -1,0 +1,948 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tung7">
+  <meta name="keywords" content="Tung7 Note">
+  
+    <meta name="description" content="传输层协议 传输层的作用，TCP协议的特点 报文首部 参考 可靠性传输 TCP可靠性传输的保证：每个已发送的报文都需要进行确认ACK，对等待ACK超时的报文进行自动重传，使用滑动窗口实现连续重传与累积确认以提高信道利用率。 **停止等待：**发送一个报文，则需等待对端对这个报文的确认ACK **自动重传请求ARQ(Automatic Repeat reQuest)：**若等待ACK超时了（每个报文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络基础-TCP协议">
+<meta property="og:url" content="http://www.tung7.com/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/TCP%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0.html">
+<meta property="og:site_name" content="Tung7 Note">
+<meta property="og:description" content="传输层协议 传输层的作用，TCP协议的特点 报文首部 参考 可靠性传输 TCP可靠性传输的保证：每个已发送的报文都需要进行确认ACK，对等待ACK超时的报文进行自动重传，使用滑动窗口实现连续重传与累积确认以提高信道利用率。 **停止等待：**发送一个报文，则需等待对端对这个报文的确认ACK **自动重传请求ARQ(Automatic Repeat reQuest)：**若等待ACK超时了（每个报文">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-07-03T05:32:12.000Z">
+<meta property="article:modified_time" content="2023-05-12T16:15:13.973Z">
+<meta property="article:author" content="Tung7">
+<meta property="article:tag" content="网络基础">
+<meta property="article:tag" content="TCP">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>网络基础-TCP协议 - Tung7 Note</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.tung7.com","root":"/","version":"1.9.4","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 50vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tung7</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="2iconfont 2icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="2iconfont 2icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="2iconfont 2icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="2iconfont 2icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">网络基础-TCP协议</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Tung7
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-07-03 13:32" pubdate>
+          13:32 July 3, 2021
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid post-container nopadding-x">
+  <div class="side-col side-col-post-left" style="padding-top:0!important;"></div>
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-left" style="padding-top:0!important;">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="日拱一卒"
+        id="heading-341e8375a2508f99f2d1d6e86d6085dd" role="tab" data-toggle="collapse" href="#collapse-341e8375a2508f99f2d1d6e86d6085dd"
+        aria-expanded="true"
+      >📁日拱一卒
+        <span class="list-group-count">(11)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-341e8375a2508f99f2d1d6e86d6085dd"
+           role="tabpanel" aria-labelledby="heading-341e8375a2508f99f2d1d6e86d6085dd">
+        
+        
+          
+  <div class="category-post-list">
+
+    
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE.html" title="网络基础-路由选择协议"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄网络基础-路由选择协议</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/TCP%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0.html" title="网络基础-TCP协议"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">📄网络基础-TCP协议</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/TCP%E5%8D%8F%E8%AE%AE%E9%9C%80%E8%A6%81%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0.html" title="TCP协议需要三次握手的主要原因"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄TCP协议需要三次握手的主要原因</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/%E4%B8%BA%E4%BB%80%E4%B9%88TCP%E7%9A%84ISN%E9%9C%80%E8%A6%81%E9%9A%8F%E6%9C%BA%E7%94%9F%E6%88%90.html" title="为什么TCP的ISN需要随机生成？"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄为什么TCP的ISN需要随机生成？</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+        
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/MultiPaxos%E6%80%9D%E6%83%B3.html" title="MultiPaxos思想"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄MultiPaxos思想</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/MySQL%20XA.html" title="MySQL XA"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄MySQL XA</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/Raft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95.html" title="Raft共识算法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄Raft共识算法</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/BasicPaxos%E7%AE%97%E6%B3%95.html" title="BasicPaxos算法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄BasicPaxos算法</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/http_protocol_conclusion.html" title="HTTP协议速览"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄HTTP协议速览</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%90%86%E8%AE%BA%E5%BA%8F%E5%B9%95.html" title="分布式系统理论序幕"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄分布式系统理论序幕</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <div id="post-icon">📝</div>
+          <article class="post-content mx-auto">
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+<!--      <i class="iconfont icon-books"></i>-->
+        🗂️
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/" class="category-chain-item"   >日拱一卒</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+<!--      <i class="iconfont icon-tags"></i>-->
+        🏷️
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">#网络基础</a>
+      
+        <a href="/tags/TCP/">#TCP</a>
+      
+    </div>
+  
+</div>
+
+            </div>
+            <hr style="border-bottom: 2px solid #b18082">
+            <!-- SEO header -->
+            <h1 style="display: none">网络基础-TCP协议</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="传输层协议"><a class="header-anchor" href="#传输层协议"></a>传输层协议</h1>
+<p>传输层的作用，<u>TCP协议的特点</u></p>
+<h1 id="报文首部"><a class="header-anchor" href="#报文首部"></a>报文首部</h1>
+<p>参考</p>
+<h1 id="可靠性传输"><a class="header-anchor" href="#可靠性传输"></a>可靠性传输</h1>
+<p><em>TCP可靠性传输的保证</em>：每个已发送的报文都需要进行确认ACK，对等待ACK超时的报文进行自动重传，使用滑动窗口实现连续重传与累积确认以提高信道利用率。</p>
+<p>**停止等待：**发送一个报文，则需等待对端对这个报文的确认ACK</p>
+<p>**自动重传请求ARQ(Automatic Repeat reQuest)：**若等待ACK超时了（每个报文分配一个超时计时器）则重发</p>
+<p>**连续ARQ：**使用滑动窗口，对报文进行流水线式的连续发送，并且接收方进行累积确认，只需对按序到达的最后高序号分组发送确认。</p>
+<p>**Go-Back-N（回退N）问题：**连续ARQ协议下，若中间报文丢失了，发送方无法知道后面报文段下落，只好把后面的报文也都重传一遍。</p>
+<p>**以字节为单位的滑动窗口：**报文首部提供一个窗口大小的字段，用以告诉对端，自己接收窗口的剩余字节大小，让对端据此设置其发送窗口。滑动窗口可以控制发送方的发送速率，保证接收方能够来得及处理到来的数据包，本身有流量控制的作用。</p>
+<h2 id="TCP如何处理无解的两军问题"><a class="header-anchor" href="#TCP如何处理无解的两军问题"></a>TCP如何处理无解的两军问题</h2>
+<p>发送方没有收到已发送报文的确认报文时</p>
+<p>接收方重复收到已经回应确认的数据时</p>
+<h2 id="缓存与窗口"><a class="header-anchor" href="#缓存与窗口"></a>缓存与窗口</h2>
+<p>在实现层面上，TCP协议栈中对发送方和接收方分别有一个缓存区，对应发送缓存和接收缓存。他们和发送窗口，接收窗口不是同一个东西，但却有紧密联系。</p>
+<p>发送缓存是TCP协议栈中的缓存区，用来接收应用程序传送过来的，并且准备进行发送的数据，同时也包含了那些已发送的但未收到确认的数据。可以认为发送窗口实际上只是发送缓存的一部分。已发送并确认的数据会从缓存中删除。</p>
+<p>接收缓存类似。它用来存放已经确认但尚未被应用程序读取的数据，也包含了到达未确认的数据（因累积确认而没来得及确认的或未按序到达的数据）。具体一点，它对应socket套接字缓冲区（SO_RCVBUF），而接受窗口对应这个缓冲区的可用空间。</p>
+<h2 id="重传的时机"><a class="header-anchor" href="#重传的时机"></a>重传的时机</h2>
+<blockquote>
+<p>重传超时时间的大小 --》 加权平均往返时间SRTT与DRTT --》重传报文段对RTT的影响 --》Karn算法 --》 对Karn算法的改进</p>
+</blockquote>
+<p>TCP为每一个报文都设置了一个超时计时器，对超时未收到ACK的报文段进行自动重发。而这个超时重传时间（RTO）的值应该取多大呢？</p>
+<p>TCP采用的是一种自适应的算法。</p>
+<p>往返时间RTT：报文段发出时间与接收到相应确认时间的时间差。</p>
+<p>加权平均往返时间SRTT：又称平滑往返时间，s=smoothed。</p>
+<p>$$新SRTT = (1-α) * 旧SRTT + α * (新RTT样本)$$</p>
+<p>其中0 ≤ α &lt; 1，TCP采用的值为1/8。内核中的计算公式为：</p>
+<p>$$SRTT += 1/8 * (m - SRTT)$$</p>
+<p>m为当前RTT。</p>
+<p>超时重传时间RTO(RetransmissionTimeOut)应该略大于上述SRTT，TCP规定：</p>
+<p>$$RTO = SRTT + 4*DRTT$$</p>
+<p>RTTd为RTT的偏差的加权平均值，也就是RTTs与RTT差值的加权平均数，反应了实际RTT与SRTT波动幅度。同样地，依据加权平均数递推式，有：</p>
+<p>$$新DRTT = (1-β) * 旧DRTT + β * |RTTs - 新RTT|$$</p>
+<p>其中0 ≤ β &lt; 1，TCP采用的值为1/4。</p>
+<p>因为无法推断出发送方所收到的确认是对最初报文段的确认还是对重传报文段的确认，所以Karn算法就忽略掉重传报文段的RTT：在计算SRTT的时候，不采用重传报文段的RTT样本。</p>
+<p>但是Karn算法会导致RTO无法更新的情况。假如网络波动引起某个时间段内的时延大幅增加，报文段都会超时并重传，这时，Karn算法会忽略掉这些重传报文段的RTT，从而导致RTO无法被更新。</p>
+<p>实际上TCP协议是这样处理的：当有报文段发送重传的时候，就将其RTO增加为2*RTO，当不再发生重传时，则按上面所诉的SRTT，RTO的式子计算。</p>
+<h2 id="Go-Back-N问题"><a class="header-anchor" href="#Go-Back-N问题"></a>Go-Back-N问题</h2>
+<p>Go-Back-N问题：由于接收方采用的是累积确认（又称延迟确认，延迟应答），所以无法向发送方反馈中间迟来或丢失报文之后的接收确认情况，使得发送方只能再次发送之后已经收到的数据。为了解决这个问题，TCP协议中提供了一个选择确认（SACK Selective ACK）的机制，它在首部选项字段中增加SACK信息，指明已收到报文段的边界信息。</p>
+<p>需要注意的是，选项字段有长度限制，最多40个字节，而一个边界信息就会消耗4字节（一个序号占4字节）。因此，选项字段最多能承载4个边界信息（1字节表示SACK标志位，1字节表示SACK长度，4x4x2=32字节）。</p>
+<p>选择确认SACK需要发送方拥有选择重传的能力。</p>
+<h1 id="流量控制"><a class="header-anchor" href="#流量控制"></a>流量控制</h1>
+<blockquote>
+<p>滑动窗口机制保证控制发送速率，使得接收方处理 --》零窗口通知（接收窗口=0），持续计时器，零窗口探测报文 --》</p>
+</blockquote>
+<p>流量控制的目的，就是<strong>让发送方的发送速率不要太快，要让接收方来得及接收接收</strong>。利用滑动窗口机制可以很方便地在TCP连接上实现流量控制。</p>
+<p>接收窗口rwnd（receiver window）</p>
+<p>TCP首部中有一个窗口大小字段，是接收方用来告诉发送方，自己的接受窗口剩余的字节数大小，让发送方以此来设置发送窗口大小。发送方的发送窗口不能超过接收方给出的接收窗口的数值。</p>
+<p>当接收方回复的窗口值为零时，也就是零窗口通知，接收方就会启动一个<strong>持续计时器（Persistence Timer）</strong>，若计时器到期之前，若没有收到恢复窗口（rwnd&gt;0）的通知，则会发送一个零窗口探测报文段。</p>
+<p><strong>持续计时器</strong>的目的是防止接收方恢复窗口的通知报文段丢失，引起的双方都在死等的问题。</p>
+<h2 id="报文段发送的时机"><a class="header-anchor" href="#报文段发送的时机"></a>报文段发送的时机</h2>
+<h3 id="Nagle算法"><a class="header-anchor" href="#Nagle算法"></a>Nagle算法</h3>
+<h3 id="糊涂窗口综合征"><a class="header-anchor" href="#糊涂窗口综合征"></a>糊涂窗口综合征</h3>
+<h1 id="拥塞控制"><a class="header-anchor" href="#拥塞控制"></a>拥塞控制</h1>
+<p>拥塞控制是一个全局性的问题，而流量控制是一个端到端的通信量控制问题。拥塞控制目的是<strong>防止过多的数据注入到网络中，避免发生网络中路由器或者链路的负载持续增加，导致网络过载不可用的情况</strong>。</p>
+<p>拥塞窗口（cwnd, Congestion Window）是一条连接中发送方维持的一个状态变量（u32），值大小</p>
+<h2 id="拥塞窗口与发送窗口的联系"><a class="header-anchor" href="#拥塞窗口与发送窗口的联系"></a>拥塞窗口与发送窗口的联系</h2>
+<p>我们知道TCP报文段首部中，窗口大小的字段值，是接收方告诉发送方自己能还能接收的数据字节数大小。也就是说，发送方发送窗口的大小不能大于接收方接收窗口的大小。另外，为了保证拥塞控制，发送窗口大小也会受到拥塞窗口的因素。snd_wnd=min(rwnd,cwnd*mss)</p>
+<h2 id="慢启动与拥塞避免"><a class="header-anchor" href="#慢启动与拥塞避免"></a>慢启动与拥塞避免</h2>
+<h2 id="快重传与快恢复"><a class="header-anchor" href="#快重传与快恢复"></a>快重传与快恢复</h2>
+<h2 id="Tahoe-Reno与Cubic"><a class="header-anchor" href="#Tahoe-Reno与Cubic"></a>Tahoe, Reno与Cubic</h2>
+<h2 id="BBR"><a class="header-anchor" href="#BBR"></a>BBR</h2>
+<h1 id="连接管理"><a class="header-anchor" href="#连接管理"></a>连接管理</h1>
+<h2 id="三次握手"><a class="header-anchor" href="#三次握手"></a>三次握手</h2>
+<ul>
+<li>sockets建立，序号同步，窗口协商</li>
+<li>历史状态对新连接的影响</li>
+</ul>
+<h2 id="四次挥手"><a class="header-anchor" href="#四次挥手"></a>四次挥手</h2>
+<ul>
+<li>全双工？</li>
+<li>资源（socket?）释放</li>
+</ul>
+<h2 id="连接的有限状态机"><a class="header-anchor" href="#连接的有限状态机"></a>连接的有限状态机</h2>
+<h1 id="其它"><a class="header-anchor" href="#其它"></a>其它</h1>
+<p>携带应答，选择重传机制，</p>
+<h1 id="参考"><a class="header-anchor" href="#参考"></a>参考</h1>
+<ul>
+<li>《计算机网络（第6版）-谢希仁》</li>
+<li><a target="_blank" rel="noopener" href="http://packetbomb.com/understanding-throughput-and-tcp-windows/">Understanding Throughput and TCP Windows – PacketBomb</a></li>
+<li>如何测量和确定Linux系统中tcp初始发送窗口的大小？ - 腾讯技术工程的回答 - 知乎 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/267728663/answer/331489185">https://www.zhihu.com/question/267728663/answer/331489185</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>网络基础-TCP协议</div>
+      <div>http://www.tung7.com/日拱一卒/TCP协议学习.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Tung7</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 3, 2021</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-right">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+<!--    <i class="iconfont icon-list"></i>-->
+    📒<span>TOC</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/hexojs/hexo" target="_blank">Hexo</a>🔸<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank">Fluid</a> <br> ©️ 2015-2023❤️Tung7 版权所有 | <a href="http://beian.miit.gov.cn" target="_blank" style="border-bottom:1px solid">粤ICP备15069283号</a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+      
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,848 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tung">
+  <meta name="keywords" content="Tung7 Note">
+  
+    <meta name="description" content="准备 本文对Redis做session共享的方案进行验证。使用一个Apache服务器与两个tomcat服务器搭建负载均衡。 打包Tomcat-Redis-Session   下载源码 https:&#x2F;&#x2F;github.com&#x2F;jcoleman&#x2F;tomcat-redis-session-manager   新建maven工程。   修改pom.xml文件。 添加依赖 12345678910&lt;dep">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat集群使用redis实现session共享">
+<meta property="og:url" content="http://www.tung7.com/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/tomcat_redis_session_share.html">
+<meta property="og:site_name" content="Tung7 Note">
+<meta property="og:description" content="准备 本文对Redis做session共享的方案进行验证。使用一个Apache服务器与两个tomcat服务器搭建负载均衡。 打包Tomcat-Redis-Session   下载源码 https:&#x2F;&#x2F;github.com&#x2F;jcoleman&#x2F;tomcat-redis-session-manager   新建maven工程。   修改pom.xml文件。 添加依赖 12345678910&lt;dep">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-09-03T10:30:34.000Z">
+<meta property="article:modified_time" content="2023-05-12T16:15:13.975Z">
+<meta property="article:author" content="Tung7">
+<meta property="article:tag" content="Tung7 Note">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Tomcat集群使用redis实现session共享 - Tung7 Note</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.tung7.com","root":"/","version":"1.9.4","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 50vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tung7</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="2iconfont 2icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="2iconfont 2icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="2iconfont 2icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="2iconfont 2icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Tomcat集群使用redis实现session共享</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Tung
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-09-03 18:30" pubdate>
+          18:30 September 3, 2016
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid post-container nopadding-x">
+  <div class="side-col side-col-post-left" style="padding-top:0!important;"></div>
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-left" style="padding-top:0!important;">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="茶话闲谈"
+        id="heading-aa690c0493bbdca1c67644e087d9fea5" role="tab" data-toggle="collapse" href="#collapse-aa690c0493bbdca1c67644e087d9fea5"
+        aria-expanded="true"
+      >📁茶话闲谈
+        <span class="list-group-count">(6)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-aa690c0493bbdca1c67644e087d9fea5"
+           role="tabpanel" aria-labelledby="heading-aa690c0493bbdca1c67644e087d9fea5">
+        
+        
+          
+  <div class="category-post-list">
+
+    
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/springmvc_spring_spring-data-jpa_env.html" title="SpringMVC-Spring-SpringDataJPA环境搭建"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄SpringMVC-Spring-SpringDataJPA环境搭建</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/tomcat_redis_session_share.html" title="Tomcat集群使用redis实现session共享"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">📄Tomcat集群使用redis实现session共享</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92.html" title="📖后端学习计划 - :cyclone:  书籍推荐"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄📖后端学习计划 - :cyclone:  书籍推荐</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/Typora%E8%87%AA%E5%AE%9A%E4%B9%89Gitee%E5%9B%BE%E5%BA%8A%E4%B8%8A%E4%BC%A0%E8%84%9A%E6%9C%AC.html" title="Typora自定义Gitee图床上传脚本"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄Typora自定义Gitee图床上传脚本</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+        
+      
+
+      
+
+      
+
+      
+        <a href="/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/emoji%E5%A4%A7%E5%85%A8.html" title="emoji大全"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄emoji大全</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <div id="post-icon">📝</div>
+          <article class="post-content mx-auto">
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+<!--      <i class="iconfont icon-books"></i>-->
+        🗂️
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/" class="category-chain-item"   >茶话闲谈</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+            </div>
+            <hr style="border-bottom: 2px solid #b18082">
+            <!-- SEO header -->
+            <h1 style="display: none">Tomcat集群使用redis实现session共享</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="准备"><a class="header-anchor" href="#准备"></a>准备</h1>
+<p>本文对Redis做session共享的方案进行验证。使用一个Apache服务器与两个tomcat服务器搭建负载均衡。</p>
+<h2 id="打包Tomcat-Redis-Session"><a class="header-anchor" href="#打包Tomcat-Redis-Session"></a>打包Tomcat-Redis-Session</h2>
+<ol>
+<li>
+<p>下载源码 <a target="_blank" rel="noopener" href="https://github.com/jcoleman/tomcat-redis-session-manager">https://github.com/jcoleman/tomcat-redis-session-manager</a></p>
+</li>
+<li>
+<p>新建maven工程。</p>
+</li>
+<li>
+<p>修改pom.xml文件。</p>
+<p><strong>添加依赖</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>redis.clients<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jedis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.7.3<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.tomcat<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>tomcat-catalina<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>7.0.27<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><strong>使用JDK1.7</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- compiler插件, 设定JDK版本 --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">source</span>&gt;</span>1.7<span class="hljs-tag">&lt;/<span class="hljs-name">source</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">target</span>&gt;</span>1.7<span class="hljs-tag">&lt;/<span class="hljs-name">target</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">encoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">encoding</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">showWarnings</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">showWarnings</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>导入源码, 打包得到<code>tomcat-redis-session.jar</code></p>
+<p>将上面下载下来的源码包中的src，拷贝到工程中的相应位置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">mvn clean package -Dmaven.test.skip=<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="获取其它依赖包"><a class="header-anchor" href="#获取其它依赖包"></a>获取其它依赖包</h2>
+<p>下载<code>jedis-2.7.3.jar</code> 和<code>commons-pool2-2.4.1.jar</code></p>
+<h1 id="配置Tomcat"><a class="header-anchor" href="#配置Tomcat"></a>配置Tomcat</h1>
+<p>准备n台tomcat。</p>
+<h2 id="添加jar包"><a class="header-anchor" href="#添加jar包"></a>添加jar包</h2>
+<p>将上面得到的<code>tomcat-redis-session.jar</code>， <code>jedis-2.7.3.jar</code>和<code>commons-pool2-2.4.1.jar</code>放入到tomcat目录下的<code>lib/</code>目录下。</p>
+<h2 id="配置端口"><a class="header-anchor" href="#配置端口"></a>配置端口</h2>
+<p>如果n台tomcat部署在同一台机器上，为避免端口占用，就要修改<code>conf/server.xml</code>中的端口：SHUTDOWN端口，HTTP端口，AJP端口。</p>
+<p>这里的两台tomcat的端口如下：</p>
+<ul>
+<li>HTTP:  8081 – AJP: 8009</li>
+<li>HTTP:  8080 – AJP: 8019</li>
+</ul>
+<h2 id="配置context-xml文件"><a class="header-anchor" href="#配置context-xml文件"></a>配置context.xml文件</h2>
+<p>修改每台tomcat的<code>conf/context.xml</code>文件，在<code>Context</code>节点中按实际情况添加如下配置。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">Valve</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve&quot;</span> /&gt;</span>  <br>    <span class="hljs-tag">&lt;<span class="hljs-name">Manager</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;com.orangefunction.tomcat.redissessions.RedisSessionManager&quot;</span>  </span><br><span class="hljs-tag">     <span class="hljs-attr">host</span>=<span class="hljs-string">&quot;app.coracle.com&quot;</span>   </span><br><span class="hljs-tag">     <span class="hljs-attr">port</span>=<span class="hljs-string">&quot;6379&quot;</span>   </span><br><span class="hljs-tag">     <span class="hljs-attr">database</span>=<span class="hljs-string">&quot;0&quot;</span>   </span><br><span class="hljs-tag">     <span class="hljs-attr">maxInactiveInterval</span>=<span class="hljs-string">&quot;60&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure>
+<h1 id="配置Apache"><a class="header-anchor" href="#配置Apache"></a>配置Apache</h1>
+<p>这里使用的Apache2.4.x。</p>
+<h2 id="配置httpd-conf"><a class="header-anchor" href="#配置httpd-conf"></a>配置httpd.conf</h2>
+<p>修改Apache目录下的<code>conf/httpd.conf</code>,</p>
+<ol>
+<li>
+<p>打开proxy, banlancer相关的模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">LoadModule proxy_module modules/mod_proxy.so<br>LoadModule proxy_ajp_module modules/mod_proxy_ajp.so<br>LoadModule proxy_balancer_module modules/mod_proxy_balancer.so<br>LoadModule proxy_connect_module modules/mod_proxy_connect.so<br>LoadModule proxy_express_module modules/mod_proxy_express.so<br>LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so<br>LoadModule proxy_ftp_module modules/mod_proxy_ftp.so<br>LoadModule proxy_html_module modules/mod_proxy_html.so<br>LoadModule proxy_http_module modules/mod_proxy_http.so<br>LoadModule proxy_http2_module modules/mod_proxy_http2.so<br>LoadModule proxy_scgi_module modules/mod_proxy_scgi.so<br>LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so<br><br>LoadModule lbmethod_byrequests_module modules/mod_lbmethod_byrequests.so<br><br>LoadModule speling_module modules/mod_speling.so<br>LoadModule slotmem_shm_module modules/mod_slotmem_shm.so<br>LoadModule xml2enc_module modules/mod_xml2enc.so<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>配置VirtualHost</p>
+<p>在<code>httpd.conf</code>文件中取消下行的注释</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">Include conf/extra/httpd-vhosts.conf<br></code></pre></td></tr></table></figure>
+<p>修改<code>conf/extra/httpd-vhosts.conf</code></p>
+<p>根据实际情况添加下面的VirtualHost</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#虚拟机配置,负载均衡配置  注意空格</span><br>&lt;VirtualHost *:80&gt;<br>    DocumentRoot <span class="hljs-string">&quot;d:/Apache24/htdocs&quot;</span><br>    ProxyPass / balancer://cluster/ stickysession=JSESSIONID|jsessionid nofailover=On<br>    ProxyPassReverse / balancer://cluster/<br>    ErrorLog <span class="hljs-string">&quot;logs/error-tung.log&quot;</span><br>    CustomLog <span class="hljs-string">&quot;logs/access-tung.log&quot;</span> common<br>&lt;/VirtualHost&gt; <br><br><span class="hljs-comment">#The ProxyRequests directive should usually be set off when using ProxyPass.</span><br>ProxyRequests Off<br>&lt;proxy balancer://cluster&gt;<br>    BalancerMember ajp://localhost:8009 loadfactor=1 smax=5 max=20 ttl=120 retry=300 <span class="hljs-built_in">timeout</span>=15<br>    BalancerMember ajp://localhost:8019 loadfactor=1 smax=5 max=20 ttl=120 retry=300 <span class="hljs-built_in">timeout</span>=15<br>    ProxySet lbmethod=byrequests<br>&lt;/proxy&gt;<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p>重启apache</p>
+</li>
+</ol>
+<h1 id="导入项目"><a class="header-anchor" href="#导入项目"></a>导入项目</h1>
+<p>为了验证sessionid是否相同，只需新建一个最简单的web工程，然后在某个jsp中输出如下内容即可。</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs jsp">&lt;%@ page contentType=<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span> %&gt;<br>&lt;!DOCTYPE html&gt;<br>&lt;html lang=<span class="hljs-string">&quot;en&quot;</span> class=<span class="hljs-string">&quot;no-js&quot;</span>&gt;<br>&lt;head&gt;<br>    &lt;meta charset=<span class="hljs-string">&quot;utf-8&quot;</span>/&gt;<br>    &lt;title&gt;xxx&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>This is <span class="hljs-number">8081</span> : &lt;br&gt;<br>&lt;%<br>    <span class="hljs-type">HttpSession</span> <span class="hljs-variable">ss</span> <span class="hljs-operator">=</span> request.getSession();<br>    out.print(ss.getId());<br>%&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Tomcat集群使用redis实现session共享</div>
+      <div>http://www.tung7.com/茶话闲谈/tomcat_redis_session_share.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Tung</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 3, 2016</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-right">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+<!--    <i class="iconfont icon-list"></i>-->
+    📒<span>TOC</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/hexojs/hexo" target="_blank">Hexo</a>🔸<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank">Fluid</a> <br> ©️ 2015-2023❤️Tung7 版权所有 | <a href="http://beian.miit.gov.cn" target="_blank" style="border-bottom:1px solid">粤ICP备15069283号</a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+      
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,898 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tung7">
+  <meta name="keywords" content="Tung7 Note">
+  
+    <meta name="description" content="前言 有时候，我们需要多个站点来实现多个需求。一般情况我们都会在站点根目录（如apache&#x2F;htdocs）下创建多个文件夹：    服务器目录 访问地址 功能     apache&#x2F;htdocs&#x2F;a www.xxx.com&#x2F;a&#x2F;* a   apache&#x2F;htdocs&#x2F;b www.xxx.com&#x2F;b&#x2F;* b   apache&#x2F;htdocs&#x2F;c www.xxx.com&#x2F;c&#x2F;* c    然而这种做法的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apache多域名多站点配置">
+<meta property="og:url" content="http://www.tung7.com/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/apache_multi-hosts.html">
+<meta property="og:site_name" content="Tung7 Note">
+<meta property="og:description" content="前言 有时候，我们需要多个站点来实现多个需求。一般情况我们都会在站点根目录（如apache&#x2F;htdocs）下创建多个文件夹：    服务器目录 访问地址 功能     apache&#x2F;htdocs&#x2F;a www.xxx.com&#x2F;a&#x2F;* a   apache&#x2F;htdocs&#x2F;b www.xxx.com&#x2F;b&#x2F;* b   apache&#x2F;htdocs&#x2F;c www.xxx.com&#x2F;c&#x2F;* c    然而这种做法的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tximgcdn.tung7.com/apache_multi-hosts/apache_multi-hosts_20210706062821_321473.jpg">
+<meta property="og:image" content="https://tximgcdn.tung7.com/apache_multi-hosts/apache_multi-hosts_20210706062826_646753.jpg">
+<meta property="og:image" content="https://tximgcdn.tung7.com/apache_multi-hosts/apache_multi-hosts_20210706062832_893141.jpg">
+<meta property="article:published_time" content="2016-09-03T10:28:00.000Z">
+<meta property="article:modified_time" content="2023-05-12T16:15:13.972Z">
+<meta property="article:author" content="Tung7">
+<meta property="article:tag" content="服务器">
+<meta property="article:tag" content="apache">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tximgcdn.tung7.com/apache_multi-hosts/apache_multi-hosts_20210706062821_321473.jpg">
+  
+  
+  
+  <title>Apache多域名多站点配置 - Tung7 Note</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.tung7.com","root":"/","version":"1.9.4","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 50vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tung7</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="2iconfont 2icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="2iconfont 2icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="2iconfont 2icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="2iconfont 2icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Apache多域名多站点配置</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Tung7
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2016-09-03 18:28" pubdate>
+          18:28 September 3, 2016
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid post-container nopadding-x">
+  <div class="side-col side-col-post-left" style="padding-top:0!important;"></div>
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-left" style="padding-top:0!important;">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="实践出真知"
+        id="heading-676464d0a1ea0a794b13746b0de3a51e" role="tab" data-toggle="collapse" href="#collapse-676464d0a1ea0a794b13746b0de3a51e"
+        aria-expanded="true"
+      >📁实践出真知
+        <span class="list-group-count">(7)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-676464d0a1ea0a794b13746b0de3a51e"
+           role="tabpanel" aria-labelledby="heading-676464d0a1ea0a794b13746b0de3a51e">
+        
+        
+          
+  <div class="category-post-list">
+
+    
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/Nginx%E9%85%8D%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98.html" title="Nginx配置浏览器缓存"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄Nginx配置浏览器缓存</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/apache_multi-hosts.html" title="Apache多域名多站点配置"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">📄Apache多域名多站点配置</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/Kafka%E9%83%A8%E7%BD%B2.html" title="Kafka部署"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄Kafka部署</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/TCP%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E5%90%8E%E9%93%BE%E8%B7%AF%E6%96%AD%E5%BC%80%E4%BA%86%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88.html" title="Lab | TCP建立连接后链路断开了会发生什么"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄Lab | TCP建立连接后链路断开了会发生什么</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/%E5%88%9D%E5%B0%9DPrometheus%E4%B8%8EGrafana%E7%9B%91%E6%8E%A7Docker.html" title="初尝Prometheus与Grafana监控Docker"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄初尝Prometheus与Grafana监控Docker</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+        
+      
+
+      
+
+      
+
+      
+        <a href="/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/TCP%E5%8F%91%E9%80%81FIN%E5%90%8E%E6%94%B6%E4%B8%8D%E5%88%B0ACK%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88.html" title="TCP发送FIN后收不到ACK会发生什么"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄TCP发送FIN后收不到ACK会发生什么</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <div id="post-icon">📝</div>
+          <article class="post-content mx-auto">
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+<!--      <i class="iconfont icon-books"></i>-->
+        🗂️
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/" class="category-chain-item"   >实践出真知</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+<!--      <i class="iconfont icon-tags"></i>-->
+        🏷️
+        <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">#服务器</a>
+      
+        <a href="/tags/apache/">#apache</a>
+      
+    </div>
+  
+</div>
+
+            </div>
+            <hr style="border-bottom: 2px solid #b18082">
+            <!-- SEO header -->
+            <h1 style="display: none">Apache多域名多站点配置</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a class="header-anchor" href="#前言"></a>前言</h1>
+<p>有时候，我们需要多个站点来实现多个需求。一般情况我们都会在站点根目录（如apache/htdocs）下创建多个文件夹：</p>
+<table>
+<thead>
+<tr>
+<th>服务器目录</th>
+<th>访问地址</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apache/htdocs/a</td>
+<td><a target="_blank" rel="noopener" href="http://www.xxx.com/a/">www.xxx.com/a/</a>*</td>
+<td>a</td>
+</tr>
+<tr>
+<td>apache/htdocs/b</td>
+<td><a target="_blank" rel="noopener" href="http://www.xxx.com/b/">www.xxx.com/b/</a>*</td>
+<td>b</td>
+</tr>
+<tr>
+<td>apache/htdocs/c</td>
+<td><a target="_blank" rel="noopener" href="http://www.xxx.com/c/">www.xxx.com/c/</a>*</td>
+<td>c</td>
+</tr>
+</tbody>
+</table>
+<p>然而这种做法的隔离效果不太好, 在我们只有一台服务器一个IP的情况下，理想的做法是这样的：</p>
+<table>
+<thead>
+<tr>
+<th>服务器目录</th>
+<th>访问地址</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apache/htdocs/a</td>
+<td><a target="_blank" rel="noopener" href="http://a.xxx.com/*">a.xxx.com/*</a></td>
+<td>a</td>
+</tr>
+<tr>
+<td>apache/htdocs/b</td>
+<td><a target="_blank" rel="noopener" href="http://b.xxx.com/*">b.xxx.com/*</a></td>
+<td>b</td>
+</tr>
+<tr>
+<td>apache/htdocs/c</td>
+<td><a target="_blank" rel="noopener" href="http://c.xxx.com/*">c.xxx.com/*</a></td>
+<td>c</td>
+</tr>
+</tbody>
+</table>
+<h1 id="修改配置文件"><a class="header-anchor" href="#修改配置文件"></a>修改配置文件</h1>
+<p>打开appache/conf/http.conf, 在最后面加上：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">NameVirtualHost</span> *<br><span class="hljs-section">&lt;VirtualHost *<span class="hljs-number">:80</span>&gt;</span><br><span class="hljs-attribute">ServerAdmin</span> admin@xxx.com<br><span class="hljs-attribute">DocumentRoot</span> /usr/local/apache/htdocs/a<br><span class="hljs-attribute">ServerName</span> a.xxx.com<br><span class="hljs-section">&lt;/VirtualHost&gt;</span><br><br><span class="hljs-comment">#</span><br><span class="hljs-attribute">NameVirtualHost</span> *<br><span class="hljs-section">&lt;VirtualHost *<span class="hljs-number">:80</span>&gt;</span><br><span class="hljs-attribute">ServerAdmin</span> admin@xxx.com<br><span class="hljs-attribute">DocumentRoot</span> /usr/local/apache/htdocs/b<br><span class="hljs-attribute">ServerName</span> b.xxx.com<br><span class="hljs-section">&lt;/VirtualHost&gt;</span><br><br><span class="hljs-comment">#</span><br><span class="hljs-attribute">NameVirtualHost</span> *<br><span class="hljs-section">&lt;VirtualHost *<span class="hljs-number">:80</span>&gt;</span><br><span class="hljs-attribute">ServerAdmin</span> admin@xxx.com<br><span class="hljs-attribute">DocumentRoot</span> /usr/local/apache/htdocs/c<br><span class="hljs-attribute">ServerName</span> c.xxx.com<br><span class="hljs-section">&lt;/VirtualHost&gt;</span><br></code></pre></td></tr></table></figure>
+<p>保存重启appache即可。</p>
+<h1 id="拓展"><a class="header-anchor" href="#拓展"></a>拓展</h1>
+<p>在<a href="http://www.tung7.com/post-91.html">Apache与Tomcat的整合</a>中，已经用Apache连接了Tomcat，下面就为Java站点和PHP站点分配不同域名。</p>
+<p>blog.tung7.com用于访问JAVA站点，而blog2.tung7.com用于访问PHP站点。</p>
+<p>同样找到apache/conf/http.conf。在最后添加或修改(下面关于Log的配置自行修改)：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs vim"># 设置虚拟主机<br># For Tomcat<br>NameVirtualHost blog.tung7.<span class="hljs-keyword">com</span>:<span class="hljs-number">80</span><br>&lt;VirtualHost blog.tung7.<span class="hljs-keyword">com</span>:<span class="hljs-number">80</span>&gt;<br>     #定义服务名称<br>     ServerName blog.tung7.<span class="hljs-keyword">com</span><br>     #定义站点项目所在路径。<br>     DocumentRoot <span class="hljs-comment">&quot;D:/Apache Software Foundation/Tomcat 7.0/webapps</span><br>     DirectoryIndex login.jsp <span class="hljs-built_in">index</span>.html <span class="hljs-built_in">index</span>.htm<br><br>     JkMount /* blog<br>     JkUnMount /*.html blog<br>     JkUnMount /*.htm blog<br><br> &lt;/VirtualHost&gt;<br> &lt;Directory <span class="hljs-string">&quot;D:/Apache Software Foundation/Tomcat 7.0/webapps&quot;</span>&gt;  <br>     Options Indexes FollowSymLinks  <br>     AllowOverride None  <br>     Order allow,deny  <br>     Allow from <span class="hljs-keyword">all</span>  <br> &lt;/Directory&gt; <br><br># For PHP<br>NameVirtualHost blog2.tung7.<span class="hljs-keyword">com</span>:<span class="hljs-number">80</span><br>&lt;VirtualHost blog2.tung7.<span class="hljs-keyword">com</span>:<span class="hljs-number">80</span>&gt;<br>     ServerAdmin zhuyuandong@vip.qq.<span class="hljs-keyword">com</span><br>     ServerName blog2.tung7.<span class="hljs-keyword">com</span><br>     DocumentRoot <span class="hljs-string">&quot;D:\AppServ\www&quot;</span><br><br>     DirectoryIndex <span class="hljs-built_in">index</span>.html <span class="hljs-built_in">index</span>.htm <span class="hljs-built_in">index</span>.php<br>     ErrorLog logs/blog2-error_log.txt<br>     CustomLog logs/blog2-access_log.txt common<br>&lt;/VirtualHost&gt;<br><br></code></pre></td></tr></table></figure>
+<p>保存重启Apache,即可。</p>
+<p><a target="_blank" rel="noopener" href="http://xn--blog-pr9l020c.tung7.com">访问blog.tung7.com</a>:</p>
+<p><img src="https://tximgcdn.tung7.com/apache_multi-hosts/apache_multi-hosts_20210706062821_321473.jpg" srcset="/img/loading.gif" lazyload alt="Image"></p>
+<p><a target="_blank" rel="noopener" href="http://xn--blog2-6u8oj48c.tung7.com">访问blog2.tung7.com</a>:</p>
+<p><img src="https://tximgcdn.tung7.com/apache_multi-hosts/apache_multi-hosts_20210706062826_646753.jpg" srcset="/img/loading.gif" lazyload alt="Image"></p>
+<p>然而这里还有一个问题，就是我们如果直接使用IP访问结果会怎么样？</p>
+<p>实际上，Apache有一个默认的VirtualHost用于IP访问，当httpconf中NameVirtualHost的时候，第一个声明的VirtualHost将用于IP访问。所以，现在如果直接使用IP访问的话，将会访问到JAVA站点。BUT, 我们一般都是禁止使用IP直接访问的，下面来实现禁止IP直接访问。</p>
+<h1 id="禁止IP直接访问"><a class="header-anchor" href="#禁止IP直接访问"></a>禁止IP直接访问</h1>
+<h2 id="第一种方法"><a class="header-anchor" href="#第一种方法"></a>第一种方法</h2>
+<p>同样在http.conf中添加一个VirtualHost</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># Forbidden IP</span><br><span class="hljs-attribute">NameVirtualHost</span> <span class="hljs-number">121.121.121.121:80</span><br><span class="hljs-section">&lt;VirtualHost <span class="hljs-number">121.121.121.121:80</span>&gt;</span><br>  <span class="hljs-comment">#必需指定这个ip地址</span><br>     <span class="hljs-attribute">ServerName</span> <span class="hljs-number">121.121.121.121</span><br>     <span class="hljs-section">&lt;Location /&gt;</span><br>     <span class="hljs-attribute">Order</span> <span class="hljs-literal">allow</span>,<span class="hljs-literal">deny</span>  <br>     <span class="hljs-attribute">Deny</span> from <span class="hljs-literal">all</span>  <br>     <span class="hljs-section">&lt;/Location&gt;</span><br><span class="hljs-section">&lt;/VirtualHost&gt;</span><br><br></code></pre></td></tr></table></figure>
+<p>访问将返回403错误。</p>
+<p><img src="https://tximgcdn.tung7.com/apache_multi-hosts/apache_multi-hosts_20210706062832_893141.jpg" srcset="/img/loading.gif" lazyload alt="Image"></p>
+<p>当然，我们可以很闷骚地自己设计错误页面。在&lt;VirtualHost *:80&gt;和</VirtualHost>加入以下代码:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">ErrorDocument</span> <span class="hljs-number">500</span> /<span class="hljs-number">500</span>.html<br><span class="hljs-attribute">ErrorDocument</span> <span class="hljs-number">404</span> /<span class="hljs-number">404</span>.html<br><span class="hljs-attribute">ErrorDocument</span> <span class="hljs-number">403</span> /<span class="hljs-number">403</span>.html<br><br></code></pre></td></tr></table></figure>
+<h2 id="第二种方法"><a class="header-anchor" href="#第二种方法"></a>第二种方法</h2>
+<p>第一种方法只是返回403，并没有确切告诉访问者禁止IP访问。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># Forbidden IP</span><br><span class="hljs-attribute">NameVirtualHost</span> <span class="hljs-number">121.121.121.121:80</span><br><span class="hljs-section">&lt;VirtualHost <span class="hljs-number">121.121.121.121:80</span>&gt;</span><br>     <span class="hljs-attribute">ServerName</span> <span class="hljs-number">121.121.121.121</span><br>     <span class="hljs-attribute">DocumentRoot</span> <span class="hljs-string">&quot;c:\AppServ\www\nosite&quot;</span><br>     <span class="hljs-attribute">DirectoryIndex</span> index.html<br><span class="hljs-section">&lt;/VirtualHost&gt;</span><br><br></code></pre></td></tr></table></figure>
+<p>相当于为该IP新建一个站点nosite，然后在里面新建一个设计好的index.html</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;Content-Type&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;text/html; charset=UTF-8&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Forbidden View By IP<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>Your Nice Design<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br><br></code></pre></td></tr></table></figure>
+<p>然后直接访问IP就会访问到nosite站点下的index.html了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Apache多域名多站点配置</div>
+      <div>http://www.tung7.com/实践出真知/apache_multi-hosts.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Tung7</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 3, 2016</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-right">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+<!--    <i class="iconfont icon-list"></i>-->
+    📒<span>TOC</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/hexojs/hexo" target="_blank">Hexo</a>🔸<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank">Fluid</a> <br> ©️ 2015-2023❤️Tung7 版权所有 | <a href="http://beian.miit.gov.cn" target="_blank" style="border-bottom:1px solid">粤ICP备15069283号</a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+      
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

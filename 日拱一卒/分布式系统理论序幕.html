@@ -1,0 +1,1038 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tung7">
+  <meta name="keywords" content="Tung7 Note">
+  
+    <meta name="description" content="分布式系统  分布式系统是其组件分布在连网的计算机上，组件之间通过传递消息进行通信和协调的系统。 为什么要分布式  高可用，可拓展，性价比   三个特点：不共享内存（需要网络传输），不共享时钟，不共享操作系统 三个问题：网络问题，时钟问题，部分失效partial failure 请求结果存在三态：成功，失败，超时 三大方向：分布式存储系统，分布式计算系统，分布式调度系统  各个方向都有一些特">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式系统理论序幕">
+<meta property="og:url" content="http://www.tung7.com/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%90%86%E8%AE%BA%E5%BA%8F%E5%B9%95.html">
+<meta property="og:site_name" content="Tung7 Note">
+<meta property="og:description" content="分布式系统  分布式系统是其组件分布在连网的计算机上，组件之间通过传递消息进行通信和协调的系统。 为什么要分布式  高可用，可拓展，性价比   三个特点：不共享内存（需要网络传输），不共享时钟，不共享操作系统 三个问题：网络问题，时钟问题，部分失效partial failure 请求结果存在三态：成功，失败，超时 三大方向：分布式存储系统，分布式计算系统，分布式调度系统  各个方向都有一些特">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-05-12T16:15:13.974Z">
+<meta property="article:modified_time" content="2023-05-12T16:15:13.974Z">
+<meta property="article:author" content="Tung7">
+<meta property="article:tag" content="分布式理论">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>分布式系统理论序幕 - Tung7 Note</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.tung7.com","root":"/","version":"1.9.4","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 50vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tung7</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="2iconfont 2icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="2iconfont 2icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="2iconfont 2icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="2iconfont 2icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">分布式系统理论序幕</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Tung7
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-05-13 00:15" pubdate>
+          00:15 May 13, 2023
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid post-container nopadding-x">
+  <div class="side-col side-col-post-left" style="padding-top:0!important;"></div>
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-left" style="padding-top:0!important;">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="日拱一卒"
+        id="heading-341e8375a2508f99f2d1d6e86d6085dd" role="tab" data-toggle="collapse" href="#collapse-341e8375a2508f99f2d1d6e86d6085dd"
+        aria-expanded="true"
+      >📁日拱一卒
+        <span class="list-group-count">(11)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-341e8375a2508f99f2d1d6e86d6085dd"
+           role="tabpanel" aria-labelledby="heading-341e8375a2508f99f2d1d6e86d6085dd">
+        
+        
+          
+  <div class="category-post-list">
+
+    
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE.html" title="网络基础-路由选择协议"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄网络基础-路由选择协议</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/TCP%E5%8D%8F%E8%AE%AE%E5%AD%A6%E4%B9%A0.html" title="网络基础-TCP协议"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄网络基础-TCP协议</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/TCP%E5%8D%8F%E8%AE%AE%E9%9C%80%E8%A6%81%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0.html" title="TCP协议需要三次握手的主要原因"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄TCP协议需要三次握手的主要原因</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/%E4%B8%BA%E4%BB%80%E4%B9%88TCP%E7%9A%84ISN%E9%9C%80%E8%A6%81%E9%9A%8F%E6%9C%BA%E7%94%9F%E6%88%90.html" title="为什么TCP的ISN需要随机生成？"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄为什么TCP的ISN需要随机生成？</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+        
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/MultiPaxos%E6%80%9D%E6%83%B3.html" title="MultiPaxos思想"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄MultiPaxos思想</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/MySQL%20XA.html" title="MySQL XA"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄MySQL XA</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/Raft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95.html" title="Raft共识算法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄Raft共识算法</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/BasicPaxos%E7%AE%97%E6%B3%95.html" title="BasicPaxos算法"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄BasicPaxos算法</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/http_protocol_conclusion.html" title="HTTP协议速览"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄HTTP协议速览</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%90%86%E8%AE%BA%E5%BA%8F%E5%B9%95.html" title="分布式系统理论序幕"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">📄分布式系统理论序幕</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <div id="post-icon">📝</div>
+          <article class="post-content mx-auto">
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+<!--      <i class="iconfont icon-books"></i>-->
+        🗂️
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/" class="category-chain-item"   >日拱一卒</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+<!--      <i class="iconfont icon-tags"></i>-->
+        🏷️
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA/">#分布式理论</a>
+      
+    </div>
+  
+</div>
+
+            </div>
+            <hr style="border-bottom: 2px solid #b18082">
+            <!-- SEO header -->
+            <h1 style="display: none">分布式系统理论序幕</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <hr>
+<ul>
+<li>
+<p>分布式系统</p>
+<ul>
+<li>分布式系统是其组件分布在连网的计算机上，组件之间通过传递消息进行通信和协调的系统。</li>
+<li>为什么要分布式
+<ul>
+<li>高可用，可拓展，性价比</li>
+</ul>
+</li>
+<li>三个特点：不共享内存（需要网络传输），不共享时钟，不共享操作系统</li>
+<li>三个问题：网络问题，时钟问题，部分失效partial failure</li>
+<li>请求结果存在三态：成功，失败，超时</li>
+<li>三大方向：分布式存储系统，分布式计算系统，分布式调度系统
+<ul>
+<li>各个方向都有一些特定的算法，但是分布式共识问题是分布式系统中最基本的问题：如何让分布式系统中的节点达成共识</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>共识</p>
+<ul>
+<li>什么是共识</li>
+<li>为什么要达成共识
+<ul>
+<li>在共识的帮助下，<strong>分布式系统就可以像单一节点一样工作</strong>——所以共识问题是分布式系统最基本的问题。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>模型</p>
+<ul>
+<li>网络模块
+<ul>
+<li>同步：响应时间是有限的</li>
+<li>异步：响应时间无限的</li>
+</ul>
+</li>
+<li>故障类型
+<ul>
+<li>Fail-stop failures 节点宕机并停止响应 (也就是常说的 not Byzantine)</li>
+<li>Byzantine failures 源自“拜占庭将军问题”，节点响应的消息无法预料，可能矛盾或者无意义。也就是除了通信故障还可能存在消息篡改和伪造。</li>
+</ul>
+</li>
+<li>消息模型
+<ul>
+<li>口信型消息oral messages（未签名（口头的）的消息）</li>
+<li>签名型消息signed messages</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>异步系统中的共识问题</p>
+<ul>
+<li>FLP不可能结论</li>
+<li>分布式共识算法需要具有的两个属性：<strong>安全性(safety)<strong>和</strong>活性(liveness)</strong>
+<ul>
+<li>安全性：所有正确的进程都认同同一个值</li>
+<li>活性：分布式系统最终会认同某一个值</li>
+<li>每一个共识算法要么牺牲掉一个属性，要么放宽对网络异步的假设。</li>
+</ul>
+</li>
+<li>FLP结论的启示
+<ul>
+<li>不再尝试寻找异步通信系统中，共识问题的完全正确的解法。可以找到一些方法，绕开FLP不可能，满足大部分情况下都能达成共识
+<ul>
+<li>故障屏蔽Fault masking
+<ul>
+<li>故障屏蔽假设故障的进程最终会恢复，并找到一种重新加入分布式系统的方式。如果没有收到来自某个进程的消息，就一直等待直到收到预期的消息。</li>
+<li>例如，两阶段提交事务使用持久存储，能够从崩溃中恢复。</li>
+</ul>
+</li>
+<li>故障检测Failure detectors</li>
+<li>随机性算法Non-Determinism</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>同步系统中的共识问题</p>
+<ul>
+<li>我们熟知的 Paxos 在异步系统中，由于<strong>活锁</strong>的存在，并没有完全解决共识问题（liveness不满足）。但 Paxos 被广泛应用在各种分布式系统中，就是因为在达成共识之前，系统并没有那么“异步”，还是有极大概率达成共识的。</li>
+<li><strong>同步系统中，如果 N 个进程中最多有 f 个会出现崩溃故障，那么经过 f + 1 轮消息传递后即可达成共识。</strong> 《Authenticated Algorithms for Byzantine Agreement》</li>
+</ul>
+</li>
+<li>
+<p>分布式理论发展历程</p>
+<ul>
+<li>
+<p>费林分类法（Flynn’s Taxonomy），MIMD引出并行和分布式系统</p>
+</li>
+<li>
+<p>分布式系统的三个问题与三个方向</p>
+</li>
+<li>
+<p>逻辑时钟。Lamport的《Time, Clocks and the Ordering of Events in a Distributed System》</p>
+</li>
+<li>
+<p>拜占庭将军问题。Lamport的《Byzantine Generals Problem》</p>
+</li>
+<li>
+<p>分布式状态机副本</p>
+</li>
+<li>
+<p>分布式快照</p>
+</li>
+<li>
+<p>FLP结论。《Impossibility of Distributed Consensus with One Faulty Process》</p>
+<ul>
+<li>证明了：在一个异步系统中，即使只有一个进程出了故障，也没有算法能够<strong>保证</strong>达成共识。</li>
+<li>注意：不是说只要有一个进程故障就不能达成共识，而是说无法确保达成共识。</li>
+</ul>
+</li>
+<li>
+<p>Paxos算法</p>
+</li>
+<li>
+<p>PBFT</p>
+</li>
+<li>
+<p>分布式系统的基本问题：共识</p>
+</li>
+</ul>
+</li>
+<li>
+<p>拜占庭将军问题</p>
+<ul>
+<li>分布式共识问题
+<ul>
+<li>什么是共识
+<ul>
+<li>系统中的多个节点对某个值达成一致</li>
+</ul>
+</li>
+<li>为什么要达成共识</li>
+</ul>
+</li>
+<li>容错算法分为两类</li>
+<li>有无恶意行为区分使用BFT还是CFT</li>
+</ul>
+</li>
+<li>
+<p>Poxas是属于CFT的一种</p>
+</li>
+<li>
+<p>Poxas重要性</p>
+<ul>
+<li>Chubby作者MikeBurrows说过，这世界上只有一种一致性共识算法，那就是Paxos</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>分布式计算中，共识Consensus问题是最重要的，最基本的问题。共识使得分布式系统表现出一致的行为，就像是单一节点一样。Lamport提出的拜占庭将军问题（The Byzantine Generals Problem），借助拜占庭将军的故事，很好地抽象了分布式系统面临的共识问题，并且探讨和论证了解决办法。</p>
+<p>拜占庭将军问题描述的是最为复杂的一种分布式故障场景，不仅含有通信故障（消息丢失，重复），而且包含恶意行为（篡改消息，伪造消息）。解决拜占庭将军问题的算法称之为拜占庭容错算法（Byzantine Fault Tolerance，BFT）。对于解决不含有恶意行为场景下的容错算法，统称为非拜占庭容错算法，也就是故障容错算法（Crash Fault Tolerance, CFT）。事实上，计算机分布式系统中，最常用的就是CFT。</p>
+<ul>
+<li>拜占庭容错算法 BFT
+<ul>
+<li>节点间存在通信故障，恶意行为的场景下，如何达成共识。</li>
+<li>这种故障场景，称之为拜占庭故障</li>
+<li>常用于开放式分布式系统，如区块链技术</li>
+<li>常见算法：口信型消息算法，签名型消息算法，PBFT算法，PoW算法</li>
+</ul>
+</li>
+<li>非拜占庭容错算法，故障容错算法 CFG
+<ul>
+<li>节点间不存在恶意行为的场景下（非拜占庭故障），如何达成共识</li>
+<li>常见算法：Paxos算法，Raft算法，ZAB算法</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式系统理论序幕</div>
+      <div>http://www.tung7.com/日拱一卒/分布式系统理论序幕.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Tung7</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 13, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-right">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+<!--    <i class="iconfont icon-list"></i>-->
+    📒<span>TOC</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/hexojs/hexo" target="_blank">Hexo</a>🔸<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank">Fluid</a> <br> ©️ 2015-2023❤️Tung7 版权所有 | <a href="http://beian.miit.gov.cn" target="_blank" style="border-bottom:1px solid">粤ICP备15069283号</a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+      
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

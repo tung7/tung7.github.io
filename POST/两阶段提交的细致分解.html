@@ -1,0 +1,867 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tung7">
+  <meta name="keywords" content="Tung7 Note">
+  
+    <meta name="description" content="keywords: 原子提交，原子提交协议 原子提交（atomic commit）：在分布式系统中，为了维护事务的原子性，所有节点对于事务的结果必须达成共识，要么所有节点全部提交事务，要么所有节点全部放弃事务。这个就叫做原子提交。 原子提交协议，是参与分布式事务节点所使用的一个协作过程，它使多个节点能够在提交事务还是放弃事务上达成共识。 两阶段提交（two-phase commit）：是一种跨多节">
+<meta property="og:type" content="article">
+<meta property="og:title" content="两阶段提交的细致分解">
+<meta property="og:url" content="http://www.tung7.com/POST/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E7%9A%84%E7%BB%86%E8%87%B4%E5%88%86%E8%A7%A3.html">
+<meta property="og:site_name" content="Tung7 Note">
+<meta property="og:description" content="keywords: 原子提交，原子提交协议 原子提交（atomic commit）：在分布式系统中，为了维护事务的原子性，所有节点对于事务的结果必须达成共识，要么所有节点全部提交事务，要么所有节点全部放弃事务。这个就叫做原子提交。 原子提交协议，是参与分布式事务节点所使用的一个协作过程，它使多个节点能够在提交事务还是放弃事务上达成共识。 两阶段提交（two-phase commit）：是一种跨多节">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-217bcf3a4d081e4734b12c32b5a05d55_1440w.jpg">
+<meta property="article:published_time" content="2023-05-12T16:15:13.970Z">
+<meta property="article:modified_time" content="2023-05-12T16:15:13.970Z">
+<meta property="article:author" content="Tung7">
+<meta property="article:tag" content="分布式系统理论">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-217bcf3a4d081e4734b12c32b5a05d55_1440w.jpg">
+  
+  
+  
+  <title>两阶段提交的细致分解 - Tung7 Note</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.tung7.com","root":"/","version":"1.9.4","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 50vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tung7</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="2iconfont 2icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="2iconfont 2icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="2iconfont 2icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="2iconfont 2icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">两阶段提交的细致分解</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Tung7
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-05-13 00:15" pubdate>
+          00:15 May 13, 2023
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid post-container nopadding-x">
+  <div class="side-col side-col-post-left" style="padding-top:0!important;"></div>
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-left" style="padding-top:0!important;">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="POST"
+        id="heading-a02439ec229d8be0e74b0c1602392310" role="tab" data-toggle="collapse" href="#collapse-a02439ec229d8be0e74b0c1602392310"
+        aria-expanded="true"
+      >📁POST
+        <span class="list-group-count">(7)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-a02439ec229d8be0e74b0c1602392310"
+           role="tabpanel" aria-labelledby="heading-a02439ec229d8be0e74b0c1602392310">
+        
+        
+          
+          
+  
+    
+    
+    
+    <div class="category-sub row nomargin-x">
+      <a class="category-subitem collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="深入理解JAVA虚拟机"
+        id="heading-f7f995778f50bb9ec54b4cb38d71d0f8" role="tab" data-toggle="collapse" href="#collapse-f7f995778f50bb9ec54b4cb38d71d0f8"
+        aria-expanded="false"
+      >📁深入理解JAVA虚拟机
+        <span class="list-group-count">(2)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse " id="collapse-f7f995778f50bb9ec54b4cb38d71d0f8"
+           role="tabpanel" aria-labelledby="heading-f7f995778f50bb9ec54b4cb38d71d0f8">
+        
+        
+          
+  <div class="category-post-list">
+
+    
+    
+      
+
+      
+
+      
+
+      
+        <a href="/POST/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JAVA%E8%99%9A%E6%8B%9F%E6%9C%BA/Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F.html" title="深入理解Java虚拟机-Java内存区域"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄深入理解Java虚拟机-Java内存区域</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+        
+  </div>
+
+        
+      </div>
+    </div>
+  
+          
+  <div class="category-post-list">
+
+    
+    
+      
+
+      
+
+      
+
+      
+        <a href="/POST/HTTP2.0%E4%B8%8EJava.html" title="HTTP2与Java9"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄HTTP2与Java9</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+        
+      
+
+      
+
+      
+
+      
+        <a href="/POST/FIN_WAIT1,FIN_WAIT2,TIME_WAIT%E5%92%8CLAST_ACK%E7%9A%84%E8%B6%85%E6%97%B6%E9%97%AE%E9%A2%98.html" title="FIN_WAIT1,FIN_WAIT2,TIME_WAIT和LAST_ACK的超时问题"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄FIN_WAIT1,FIN_WAIT2,TIME_WAIT和LAST_ACK的超时问题</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/POST/HTTP2.0%E7%9A%84%E6%96%B0%E5%8F%98%E5%8C%96.html" title="HTTP2.0的新变化"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄HTTP2.0的新变化</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/POST/%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E7%9A%84%E7%BB%86%E8%87%B4%E5%88%86%E8%A7%A3.html" title="两阶段提交的细致分解"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">📄两阶段提交的细致分解</span>
+        </a>
+      
+    
+  </div>
+
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <div id="post-icon">📝</div>
+          <article class="post-content mx-auto">
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+<!--      <i class="iconfont icon-books"></i>-->
+        🗂️
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/POST/" class="category-chain-item"   >POST</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+<!--      <i class="iconfont icon-tags"></i>-->
+        🏷️
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%90%86%E8%AE%BA/">#分布式系统理论</a>
+      
+    </div>
+  
+</div>
+
+            </div>
+            <hr style="border-bottom: 2px solid #b18082">
+            <!-- SEO header -->
+            <h1 style="display: none">两阶段提交的细致分解</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>keywords: 原子提交，原子提交协议</p>
+<p>原子提交（atomic commit）：在分布式系统中，为了维护事务的原子性，所有节点对于事务的结果必须达成共识，要么所有节点全部提交事务，要么所有节点全部放弃事务。这个就叫做原子提交。</p>
+<p>原子提交协议，是参与分布式事务节点所使用的一个协作过程，它使多个节点能够在提交事务还是放弃事务上达成共识。</p>
+<p>两阶段提交（two-phase commit）：是一种跨多节点实现<strong>原子提交</strong>的算法，即确保所有节点提交或所有节点放弃。它是最常用的原子提交协议。</p>
+<p>在单阶段提交的方式中，客户端要求提交事务时，不允许任何节点单方面放弃事务。一般来说，阻止节点提交它自己那部分事务的原因通常与并发控制问题有关（加锁后的死锁问题，需要将事务放弃）。</p>
+<p>两阶段提交的设计出发点，是允许任何一个参与者<strong>自行放弃</strong>它自己的那部分事务。</p>
+<p>由于事务的原子性要求，如果部分事务别放弃，那么整个分布式事务也必须被放弃。</p>
+<p>在两阶段提交的第一阶段，每个参与者投票表决事务时放弃还是提交。一旦参与者投票要求提交事务，那么就不允许放弃事务（任何情况都不允许，宕机，硬盘空间不足，甚至断电都不允许放弃。这需要在工程实现上进行保证）。也就是说，第一阶段中，每个参与者对自己那部分的事务有单方面放弃的权力，放弃则投票放弃整个事务，否则投票提交整个事务。参与者一旦投票完成，就失去了事务单方面的权力，并且这个权力被统一转移到了协调者。协调者依据投票结果，确定一个共同的决定（共识）：是提交事务，还是放弃事务。</p>
+<p>协议在无故障的情况下相当简单，但是协议必须在各种故障时也能够正常工作。这个故障包括节点崩溃，消息丢失或者节点暂时失联等等。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/358576217">Mysql基于两阶段实现redo、binlog日志一致性 - bluesky的文章 - 知乎 </a></p>
+<h1 id="过程"><a class="header-anchor" href="#过程"></a>过程</h1>
+<p>角色：客户端client，协调者coordinator，参与者participant</p>
+<p>客户端向启动一个分布式事务，它向协调者请求一个事务ID，并将此事务消息发送给所有参与者。</p>
+<p>在实际的分布式数据库中，开始两阶段提交前由协调者向若干参与者发送SQL请求或执行计划，包括获取行锁，生成redo数据等操作。</p>
+<p>第一阶段：投票阶段/准备阶段，Prepare阶段</p>
+<p>第二阶段：完成阶段，Commit阶段</p>
+<h1 id="局限"><a class="header-anchor" href="#局限"></a>局限</h1>
+<p>阻塞：2PC是一个阻塞式的协议，在所有参与者执行commit/abort之前的任何时间内协调者宕机，都将阻塞事务进程，必须等待协调者恢复后，事务才能继续执行。</p>
+<p>延迟：协调者要持久化事务的commit/abort状态后才能发送commit/abort命令，因此全程至少2次RPC延迟（prepare+commit），和3次持久化数据延迟（prepare写日志+协调者状态持久化+commit写日志）。</p>
+<h2 id="如何判断binlog和redolog是否达成了一致"><a class="header-anchor" href="#如何判断binlog和redolog是否达成了一致"></a>如何判断binlog和redolog是否达成了一致#</h2>
+<p><strong>这个知识点可是纯干货！</strong></p>
+<p>当MySQL写完redolog并将它标记为prepare状态时，并且会在redolog中记录一个XID，它全局唯一的标识着这个事务。而当你设置<code>sync_binlog=1</code>时，做完了上面第一阶段写redolog后，mysql就会对应binlog并且会直接将其刷新到磁盘中。</p>
+<p>下图就是磁盘上的row格式的binlog记录。binlog结束的位置上也有一个XID。</p>
+<p>只要这个XID和redolog中记录的XID是一致的，MySQL就会认为binlog和redolog逻辑上一致。就上面的场景来说就会commit，而如果仅仅是rodolog中记录了XID，binlog中没有，MySQL就会RollBack</p>
+<p><img src="https://pic2.zhimg.com/80/v2-217bcf3a4d081e4734b12c32b5a05d55_1440w.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>(1)prepare阶段把page物理修改记录到redo buffer，(2)将逻辑操作写binlog缓存区并直接落盘到磁盘binlog文件，(3)commit阶段才允许主线程将redo buffer里的数据刷新到磁盘redo log文件。无论是(1)(2)之间宕机还是(2)(3)之间宕机，都会回滚，(3)之后才会提交。是这样的吗？</p>
+<blockquote>
+<p>Prepare阶段，将Redo Log写入文件，并刷入磁盘，记录上内部XA事务的ID，同时将Redo Log状态设置为Prepare。Redo Log写入成功后，再将Binlog同样刷入磁盘，记录XA事务ID。</p>
+<p>Commit阶段，向磁盘中的Redo Log写入Commit标识，表示事务提交。然后执行器调用存储引擎的接口提交事务。这就是整个过程。</p>
+<h3 id="验证2PC机制的可用性"><a class="header-anchor" href="#验证2PC机制的可用性"></a><strong>验证2PC机制的可用性</strong></h3>
+<p>这就是2PC提交Redo Log和Binlog的过程，那在这个期间发生了异常，2PC这套机制真的能保证数据一致性吗？</p>
+<p>假设Redo Log刷入成功了，但是还没来得及刷入Binlog MySQL就挂了。此时重启之后会发现Redo Log并没有Commit标识，此时根据记录的XA事务找到这个事务，进行回滚。</p>
+<p>如果Redo Log刷入成功，而且Binlog也刷入成功了，但是还没有来得及将Redo Log从Prepare改成Commit MySQL就挂了，此时重启会发现虽然Redo Log没有Commit标识，但是通过XID查询到的Binlog却已经成功刷入磁盘了。</p>
+<p>此时，虽然Redo Log没有Commit标识，MySQL也要提交这个事务。因为Binlog一旦写入，就可能会被从库或者任何消费Binlog的消费者给消费。如果此时MySQL不提交事务，则可能造成数据不一致。而且目前Redo Log和Binlog从数据层面上，其实已经Ready了，只是差个标志位。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>两阶段提交的细致分解</div>
+      <div>http://www.tung7.com/POST/两阶段提交的细致分解.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Tung7</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 13, 2023</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-right">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+<!--    <i class="iconfont icon-list"></i>-->
+    📒<span>TOC</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/hexojs/hexo" target="_blank">Hexo</a>🔸<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank">Fluid</a> <br> ©️ 2015-2023❤️Tung7 版权所有 | <a href="http://beian.miit.gov.cn" target="_blank" style="border-bottom:1px solid">粤ICP备15069283号</a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+      
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,941 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Tung7">
+  <meta name="keywords" content="Tung7 Note">
+  
+    <meta name="description" content="张逸 民航信息技术总监 《接构领域驱动设计》作者 领域驱动设计大揭秘   DDD vs DDD （数据驱动 vs 领域驱动） DDD黑铁时代与黄金时代 单体架构是邪恶的吗 DDD的不足与DDD-UP   传统与DDD 传统设计模型的分析 ER图，专注数据字段，到类设计层面就是数据表映射到数据类，这种类看作是一个携带数据的一种结构（数据实体）。也就是贫血模型（数据结构与算法分开，只有数据结构的模型）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDD峰会2020摘录">
+<meta property="og:url" content="http://www.tung7.com/%E4%BB%96%E5%B1%B1%E4%B9%8B%E7%9F%B3/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95.html">
+<meta property="og:site_name" content="Tung7 Note">
+<meta property="og:description" content="张逸 民航信息技术总监 《接构领域驱动设计》作者 领域驱动设计大揭秘   DDD vs DDD （数据驱动 vs 领域驱动） DDD黑铁时代与黄金时代 单体架构是邪恶的吗 DDD的不足与DDD-UP   传统与DDD 传统设计模型的分析 ER图，专注数据字段，到类设计层面就是数据表映射到数据类，这种类看作是一个携带数据的一种结构（数据实体）。也就是贫血模型（数据结构与算法分开，只有数据结构的模型）">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062842_488234.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062849_148415.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062856_284094.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062907_866505.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062913_997895.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062919_147282.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062926_378798.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062938_941172.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062947_638824.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062953_744390.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062959_205757.png">
+<meta property="og:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706063006_179024.png">
+<meta property="article:published_time" content="2020-12-28T06:17:23.000Z">
+<meta property="article:modified_time" content="2023-05-12T16:15:13.971Z">
+<meta property="article:author" content="Tung7">
+<meta property="article:tag" content="DDD">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062842_488234.png">
+  
+  
+  
+  <title>DDD峰会2020摘录 - Tung7 Note</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.tung7.com","root":"/","version":"1.9.4","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0-rc1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 50vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Tung7</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="2iconfont 2icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="2iconfont 2icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="2iconfont 2icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="2iconfont 2icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" false
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">DDD峰会2020摘录</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Tung7
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2020-12-28 14:17" pubdate>
+          14:17 December 28, 2020
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid post-container nopadding-x">
+  <div class="side-col side-col-post-left" style="padding-top:0!important;"></div>
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-left" style="padding-top:0!important;">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="他山之石"
+        id="heading-560b6e30e9355efbb4706b7eedbf6b2c" role="tab" data-toggle="collapse" href="#collapse-560b6e30e9355efbb4706b7eedbf6b2c"
+        aria-expanded="true"
+      >📁他山之石
+        <span class="list-group-count">(4)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-560b6e30e9355efbb4706b7eedbf6b2c"
+           role="tabpanel" aria-labelledby="heading-560b6e30e9355efbb4706b7eedbf6b2c">
+        
+        
+          
+  <div class="category-post-list">
+
+    
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E4%BB%96%E5%B1%B1%E4%B9%8B%E7%9F%B3/detail_docker_study_note.html" title="非常详细的Docker学习笔记"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄非常详细的Docker学习笔记</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E4%BB%96%E5%B1%B1%E4%B9%8B%E7%9F%B3/introduction_swarm.html" title="深入浅出Swarm"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">📄深入浅出Swarm</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+
+      
+        <a href="/%E4%BB%96%E5%B1%B1%E4%B9%8B%E7%9F%B3/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95.html" title="DDD峰会2020摘录"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">📄DDD峰会2020摘录</span>
+        </a>
+      
+    
+      
+
+      
+
+      
+        
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <div id="post-icon">📝</div>
+          <article class="post-content mx-auto">
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+<!--      <i class="iconfont icon-books"></i>-->
+        🗂️
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%96%E5%B1%B1%E4%B9%8B%E7%9F%B3/" class="category-chain-item"   >他山之石</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+<!--      <i class="iconfont icon-tags"></i>-->
+        🏷️
+        <a href="/tags/DDD/">#DDD</a>
+      
+    </div>
+  
+</div>
+
+            </div>
+            <hr style="border-bottom: 2px solid #b18082">
+            <!-- SEO header -->
+            <h1 style="display: none">DDD峰会2020摘录</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="张逸-民航信息技术总监-《接构领域驱动设计》作者"><a class="header-anchor" href="#张逸-民航信息技术总监-《接构领域驱动设计》作者"></a>张逸 民航信息技术总监 《接构领域驱动设计》作者</h1>
+<h2 id="领域驱动设计大揭秘"><a class="header-anchor" href="#领域驱动设计大揭秘"></a>领域驱动设计大揭秘</h2>
+<blockquote>
+<ol>
+<li>DDD vs DDD （数据驱动 vs 领域驱动）</li>
+<li>DDD黑铁时代与黄金时代</li>
+<li>单体架构是邪恶的吗</li>
+<li>DDD的不足与DDD-UP</li>
+</ol>
+</blockquote>
+<h2 id="传统与DDD"><a class="header-anchor" href="#传统与DDD"></a>传统与DDD</h2>
+<h3 id="传统设计模型的分析"><a class="header-anchor" href="#传统设计模型的分析"></a>传统设计模型的分析</h3>
+<p>ER图，专注数据字段，到类设计层面就是数据表映射到数据类，这种类看作是一个携带数据的一种结构（数据实体）。也就是贫血模型（数据结构与算法分开，只有数据结构的模型）。</p>
+<p>字段的重用。从超类的实现，到组合的实现。</p>
+<p>贫血模型将算法聚集在一个没有状态的service里面，这个service称之为事务脚本，</p>
+<p>上述的贫血模型+事务脚本的结合方式就是一种传统的面向过程的方式。</p>
+<p>存在模块，服务，组件的概念</p>
+<h3 id="DDD下模型的重用"><a class="header-anchor" href="#DDD下模型的重用"></a>DDD下模型的重用</h3>
+<p>属性字段的重用，传统模型会通过超类实现，DDD从组合的角度实现。</p>
+<p><strong>限界上下文 - Bounded Context，是业务能力的纵向切分，顺应业务的变化方向</strong></p>
+<p>例：对于客户Customer模型而言，它在销售上下文与售后上下文中的关注点是不一样的</p>
+<p>BC之间的重用，是借助业务能力进行重用的，而不是直接重用领域模型。</p>
+<p>财务上下文中，关注往来账的业务能力。其中有运输费的业务，但是财务BC不具备计算运费的能力，运费领域模型包含了运输费，租赁费，人工费，保费等信息。这些是要在运输上下文中提供。对于财务BC，会提供一个结算账目的业务能力，它在结算的时候，需要得到一个运费，这就需要运输BC的业务能力。可以看到这里是通过业务能力（可能就是我们看到的一种RESTful服务）来保证重用的，而不是直接使用对方的领域模型，从而保证依赖降低（解耦）。</p>
+<p>领域模型的知识语境。识别上下文，确定领域模型的知识语境</p>
+<p>运输BC，需要商品的信息，但是只需要商品运输高度，运输深度，有没有回收，有没有收税这些属性。</p>
+<p>商品BC中会定义一个商品类Product，运输BC中也会定义一个商品类Product，</p>
+<p>先是业务层面，领域层面的纵向切分，再是技术角度来划分业务模块，数据访问模块。从编码的角度上看，如果业务发生变化，只影响到了其中一个类。</p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062842_488234.png" srcset="/img/loading.gif" lazyload alt="image-20210613100555039"></p>
+<p><strong>聚合与聚合根</strong></p>
+<p>对象的依赖，生命周期的管理。经常大量需要细粒度的类，这样会导致类关系图异常复杂。从对象的相关性进行划分边界进行聚合，然后为每一个聚合定义一个聚合根实体，聚合之间只允许聚合根之间进行关联，以此减少类与类的关系。</p>
+<p>聚合根对外提供交互关系，内部的细节是它自己的实现，外部不需要关心。</p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062849_148415.png" srcset="/img/loading.gif" lazyload alt="image-20210613101813903"></p>
+<p><strong>限界上下文</strong>与<strong>聚合</strong>是DDD的核心模式。</p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062856_284094.png" srcset="/img/loading.gif" lazyload alt="image-20210613102006057"></p>
+<h2 id="黑铁时代与黄金时代"><a class="header-anchor" href="#黑铁时代与黄金时代"></a>黑铁时代与黄金时代</h2>
+<p>DDD是03年开始当时是一个很新的概念，对开发人员和设计人员来说，第一会导致知识上的增加。他们面临大量新概念新知识涌入的压力，其实是很难接受的。第二，他没有意识到限界上下的价值，BC是架构层次的自治单元。</p>
+<p>南北向菱形模型：南向：领域-端口-适配器，北向：远程-本地-领域。 调用一般是南北走向？</p>
+<p>随着微服务的诞生，DDD开始火起来。</p>
+<p>微服务的协作就是限界上下文的协作。通过**Client防腐层？**调用上游微服务成为合理的选择。</p>
+<h2 id="单体架构与领域驱动架构风格"><a class="header-anchor" href="#单体架构与领域驱动架构风格"></a>单体架构与领域驱动架构风格</h2>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062907_866505.png" srcset="/img/loading.gif" lazyload alt="DDD峰会2020摘录_20210614050949_233675"></p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062913_997895.png" srcset="/img/loading.gif" lazyload alt="image-20210613111652495"></p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062919_147282.png" srcset="/img/loading.gif" lazyload alt="事件驱动架构"></p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062926_378798.png" srcset="/img/loading.gif" lazyload alt="DDD峰会2020摘录_20210614051005_654846"></p>
+<h2 id="DDD的不足与补充"><a class="header-anchor" href="#DDD的不足与补充"></a>DDD的不足与补充</h2>
+<ul>
+<li>缺乏规范的<strong>过程指导</strong>，缺乏<strong>可操作性</strong>，团队实践过程中，更多取决于设计者的行业知识与设计经验，这就存在较大的偶然性。</li>
+<li>没有匹配的需求管理体系。不同层次的业务需求贯穿于领域驱动设计过程中的每个环节，识别限界上下文和建立高质量的领域模型<strong>都有赖于</strong>良好的需求。需求管理体系直接影响领域驱动设计的质量。</li>
+<li>DDD的核心诉求是让<strong>业务架构</strong>和<strong>应用架构</strong>形成<strong>绑定关系</strong>，以面对需求变化时，使得<strong>应用架构能够适应业务架构的调整</strong>，满足架构的<strong>演进性</strong>。但是DDD却<strong>缺乏面向领域的架构体系</strong>，不足以支撑复杂软件项目的架构需求。
+<ul>
+<li>目前能和BC对应上的只有分层架构。后来还有六边形架构，还有上面所说的菱形架构</li>
+</ul>
+</li>
+<li>DDD虽然以模型驱动设计为主线，却<strong>没有给出明确的领域建模方法</strong>。我们需要分别为领域<strong>分析建模</strong>，领域<strong>设计建模</strong>和领域<strong>实现建模</strong>提供对应的方法指导，减轻各个建模活动的知识负担，明确每个建模活动活动的领域模型的验证标准，避免领域建模的随意性。
+<ul>
+<li>分析模型，设计模型，实现模型应该保持一致。但是，没有提供方法告诉我们：怎么去提炼对象，怎么建立模型对象，模型从分析到设计到实现是怎么转换。</li>
+</ul>
+</li>
+</ul>
+<p>RUP? 问题空间-解空间</p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062938_941172.png" srcset="/img/loading.gif" lazyload alt="DDD峰会2020摘录_20210614051041_704101"></p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062947_638824.png" srcset="/img/loading.gif" lazyload alt="image-20210613123247487"></p>
+<h1 id="欧创新-《中台架构与实现：基于DDD和微服务》作者"><a class="header-anchor" href="#欧创新-《中台架构与实现：基于DDD和微服务》作者"></a>欧创新 《中台架构与实现：基于DDD和微服务》作者</h1>
+<h2 id="当中台遇上DDD，如何设计微服务"><a class="header-anchor" href="#当中台遇上DDD，如何设计微服务"></a>当中台遇上DDD，如何设计微服务</h2>
+<p>顶层设计开始，行业领域不同关注也不同，阿里的通用能力中台关注公共业务领域，主要解决重复造轮子的问题。</p>
+<p>战略与战术</p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062953_744390.png" srcset="/img/loading.gif" lazyload alt="DDD峰会2020摘录_20210614051123_449536"></p>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706062959_205757.png" srcset="/img/loading.gif" lazyload alt="DDD峰会2020摘录_20210614051117_995382"></p>
+<p>DDD下的微服务边界</p>
+<ul>
+<li>微服务单体内，基于聚合划分的逻辑边界，提供了微服务进一步划分的能力，这就解决了微服务内高内聚下面对变更时修改的难题。</li>
+<li>限界上下文边界，在微服务落地的时候，就变成了微服务之间的物理边界。</li>
+</ul>
+<p><img src="https://tximgcdn.tung7.com/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95/DDD%E5%B3%B0%E4%BC%9A2020%E6%91%98%E5%BD%95_20210706063006_179024.png" srcset="/img/loading.gif" lazyload alt="image-20210613150558524"></p>
+<h1 id="于静-IBM资深应用架构师"><a class="header-anchor" href="#于静-IBM资深应用架构师"></a>于静 IBM资深应用架构师</h1>
+<h2 id="领域驱动设计在大型遗留系统改造中的实践"><a class="header-anchor" href="#领域驱动设计在大型遗留系统改造中的实践"></a>领域驱动设计在大型遗留系统改造中的实践</h2>
+<p>制定目标与策略-业务梳理-微服务改造-集成测试迁移-反馈。这五个步骤循环往复。</p>
+<ul>
+<li>业务梳理
+<ul>
+<li>用领域驱动的方式进行业务建模</li>
+<li>抽象出一个业务模型，根据这个模型的关系划分限界上下文。 <strong>关键</strong></li>
+<li>有效深刻地理解现有的系统，梳理现有的业务。</li>
+<li>系统改造最难的一点就是分析业务和代码：很难理解现有系统的一些业务逻辑，很难理解现有系统为什么这么设计，以及整个系统包含了哪些业务。</li>
+</ul>
+</li>
+<li>微服务改造
+<ul>
+<li>依据梳理出来的限界上下文，同时也需要先梳理现有系统架构，集成的方式，暴露的API，然后往微服务转换。</li>
+</ul>
+</li>
+<li>测试，生产迁移
+<ul>
+<li>环境，域名，数据</li>
+</ul>
+</li>
+<li>反馈
+<ul>
+<li>基于前几步骤，反馈给团队，以便更好地指导下一阶段的改造。</li>
+<li>包含业务方反馈？</li>
+</ul>
+</li>
+</ul>
+<h2 id="DDD引领微服务系统设计"><a class="header-anchor" href="#DDD引领微服务系统设计"></a>DDD引领微服务系统设计</h2>
+<p>如何识别系统边界？识别系统边界的一个实践就是事件风暴工作坊。</p>
+<p>要求<strong>业务需求的提出者</strong>与<strong>技术实施者</strong>协作完成整个的领域设计建模（业务人员，开发，QA，PM等等，新实践需要教练主持人，通知准备，引导思路）</p>
+<ul>
+<li>熟悉项目的成员介绍一下项目情况
+<ul>
+<li>专注背后的业务讨论</li>
+<li>避免开发人员陷入系统设计中，要脱离数据库表设计的固化思维，跳出现有的代码设计。（主持人需要关注并提醒）</li>
+</ul>
+</li>
+<li>做好准备工作</li>
+<li>专注业务讨论</li>
+<li>可以邀请第三方接口团队人员参与
+<ul>
+<li>涉及三方接口时，可以邀请二方/三方团队参加</li>
+</ul>
+</li>
+<li>成果记录
+<ul>
+<li>推荐Mural</li>
+</ul>
+</li>
+</ul>
+<p>业务分析过程中，会出现一个疑问：遗留系统的业务逻辑一定都是正确、适用（新变更，新场景）的吗？</p>
+<ul>
+<li>前后矛盾的逻辑</li>
+<li>年久失修的逻辑</li>
+<li>无人问津的逻辑</li>
+</ul>
+<p>我们在设计领域模型的时候，需要考虑，或者顺带着纠正这些问题。</p>
+<p>但是这些问题的解决取决于团队对系统的所有权（ownership）的强度（话事权高对改动是十分友好的。）</p>
+<h2 id="微服务实战"><a class="header-anchor" href="#微服务实战"></a>微服务实战</h2>
+<blockquote>
+<p>绞杀者模式：</p>
+<p>通过逐步用新应用程序和服务，替换特定功能段，增量迁移旧系统。随着旧系统功能的更换，新系统最终取代了所有旧系统功能，扼杀并停用旧系统。</p>
+</blockquote>
+<p>第一个功能段，先锋队，挑选一个规模较小，功能简单，业务较为独立的功能模块。</p>
+<ul>
+<li>明确分层模型中各层的职责</li>
+<li>脚手架工程（模板工程）</li>
+<li>公共组件</li>
+<li>防腐层</li>
+<li>测试用例</li>
+<li>DevOps</li>
+<li>云基础设施</li>
+</ul>
+<p>士气：功能简单，时间周期战线不能拉太长。</p>
+<p>规范：先锋队起试验作用，制定规范。</p>
+<h1 id="杨云-ThoughtWorks总监咨询师"><a class="header-anchor" href="#杨云-ThoughtWorks总监咨询师"></a>杨云 ThoughtWorks总监咨询师</h1>
+<h2 id="DDD从战略实际到代码落地的三阶段方法"><a class="header-anchor" href="#DDD从战略实际到代码落地的三阶段方法"></a>DDD从战略实际到代码落地的三阶段方法</h2>
+<ol>
+<li>为什么大家觉得落地难</li>
+<li>DDD落地的三阶段方法</li>
+<li>事件风暴来做战略建模</li>
+<li>用名词动词法做子域内的结构化战术建模</li>
+<li>用类型流做行为内部的微观详细设计</li>
+</ol>
+<p>模型：软件的核心骨架，核心约束，核心概念的一个可视化体现。</p>
+<p>百人团队的DDD模型落地，具体到直观的微观模型，保证模型和代码的一致性。</p>
+<h1 id="歪：个人重构感悟"><a class="header-anchor" href="#歪：个人重构感悟"></a>歪：个人重构感悟</h1>
+<p>术语对齐。事件风暴，业务梳理，设计与落地的走样的问题</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>DDD峰会2020摘录</div>
+      <div>http://www.tung7.com/他山之石/DDD峰会2020摘录.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Tung7</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>December 28, 2020</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - Non-commercial">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - Share-alike">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2 side-col-post-right">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+<!--    <i class="iconfont icon-list"></i>-->
+    📒<span>TOC</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/hexojs/hexo" target="_blank">Hexo</a>🔸<a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank">Fluid</a> <br> ©️ 2015-2023❤️Tung7 版权所有 | <a href="http://beian.miit.gov.cn" target="_blank" style="border-bottom:1px solid">粤ICP备15069283号</a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+      
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
