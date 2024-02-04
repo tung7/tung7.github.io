@@ -2,20 +2,6 @@
 <search>
   <entry>
     <title>index</title>
-    <url>/%E4%BB%96%E5%B1%B1%E4%B9%8B%E7%9F%B3/index.html</url>
-    <content><![CDATA[<h1 id="🎯️-Goals"><a class="header-anchor" href="#🎯️-Goals"></a>🎯️ Goals</h1>
-<p>👉️ 他山之石，可以攻玉。<br>
-学习借鉴其他人或者公司的做法，体会best/bad practicel。</p>
-]]></content>
-      <categories>
-        <category>他山之石</category>
-      </categories>
-      <tags>
-        <tag>Tag</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>index</title>
     <url>/POST/index.html</url>
     <content><![CDATA[<p>待整理的文章</p>
 ]]></content>
@@ -28,28 +14,13 @@
   </entry>
   <entry>
     <title>index</title>
-    <url>/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/index.html</url>
-    <content><![CDATA[<h1 id="哈哈哈"><a class="header-anchor" href="#哈哈哈"></a>哈哈哈</h1>
-<p>👉️ 日拱一卒，功不唐捐。</p>
-<p>📇 体系化的知识，需要一步一个脚印地输入，</p>
-<p>👣 也需要循序渐进地消化。</p>
+    <url>/%E4%BB%96%E5%B1%B1%E4%B9%8B%E7%9F%B3/index.html</url>
+    <content><![CDATA[<h1 id="🎯️-Goals"><a class="header-anchor" href="#🎯️-Goals"></a>🎯️ Goals</h1>
+<p>👉️ 他山之石，可以攻玉。<br>
+学习借鉴其他人或者公司的做法，体会best/bad practicel。</p>
 ]]></content>
       <categories>
-        <category>日拱一卒</category>
-      </categories>
-      <tags>
-        <tag>Tag</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>index</title>
-    <url>/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/index.html</url>
-    <content><![CDATA[<h1 id="哈哈哈"><a class="header-anchor" href="#哈哈哈"></a>哈哈哈</h1>
-<p>🎯️ Goals</p>
-<p>👉️</p>
-]]></content>
-      <categories>
-        <category>实践出真知</category>
+        <category>他山之石</category>
       </categories>
       <tags>
         <tag>Tag</tag>
@@ -65,18 +36,6 @@
 ]]></content>
       <categories>
         <category>朝花夕拾</category>
-      </categories>
-      <tags>
-        <tag>Tag</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>index</title>
-    <url>/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/index.html</url>
-    <content><![CDATA[<p>😚</p>
-]]></content>
-      <categories>
-        <category>茶话闲谈</category>
       </categories>
       <tags>
         <tag>Tag</tag>
@@ -1565,6 +1524,47 @@
   </entry>
   <entry>
     <title>index</title>
+    <url>/%E8%8C%B6%E8%AF%9D%E9%97%B2%E8%B0%88/index.html</url>
+    <content><![CDATA[<p>😚</p>
+]]></content>
+      <categories>
+        <category>茶话闲谈</category>
+      </categories>
+      <tags>
+        <tag>Tag</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>index</title>
+    <url>/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/index.html</url>
+    <content><![CDATA[<h1 id="哈哈哈"><a class="header-anchor" href="#哈哈哈"></a>哈哈哈</h1>
+<p>👉️ 日拱一卒，功不唐捐。</p>
+<p>📇 体系化的知识，需要一步一个脚印地输入，</p>
+<p>👣 也需要循序渐进地消化。</p>
+]]></content>
+      <categories>
+        <category>日拱一卒</category>
+      </categories>
+      <tags>
+        <tag>Tag</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>index</title>
+    <url>/%E5%AE%9E%E8%B7%B5%E5%87%BA%E7%9C%9F%E7%9F%A5/index.html</url>
+    <content><![CDATA[<h1 id="哈哈哈"><a class="header-anchor" href="#哈哈哈"></a>哈哈哈</h1>
+<p>🎯️ Goals</p>
+<p>👉️</p>
+]]></content>
+      <categories>
+        <category>实践出真知</category>
+      </categories>
+      <tags>
+        <tag>Tag</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>index</title>
     <url>/POST/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JAVA%E8%99%9A%E6%8B%9F%E6%9C%BA/index.html</url>
     <content><![CDATA[<p>深入java虚拟机</p>
 ]]></content>
@@ -2833,6 +2833,185 @@ B ----&gt; |No| E[End]
       </tags>
   </entry>
   <entry>
+    <title>BasicPaxos算法</title>
+    <url>/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/BasicPaxos%E7%AE%97%E6%B3%95.html</url>
+    <content><![CDATA[<hr>
+<ul>
+<li>
+<p>CFT 非拜占庭容错算法， 故障容错算法</p>
+</li>
+<li>
+<p>目的</p>
+<ul>
+<li>多节点就某一个值达成共识</li>
+<li>达成了共识后，值就不会再变了，但如果我们想改变数据的值，可以实现状态机，和提议新的指令。</li>
+</ul>
+</li>
+<li>
+<p>三个角色</p>
+<ul>
+<li>Proposer，Acceptor，Learner</li>
+</ul>
+</li>
+<li>
+<p>单调递增的提案编号</p>
+<ul>
+<li>论文提到了思路。独立、递增、存储在可靠性设备中。具体细节实现，可以参考Hashicorp Raft的CurrentTerm的实现（Raft.setCurrentTerm()、raftState.getCurrentTerm()、raftState.setCurrentTerm()），原子、递增、持久存储。</li>
+</ul>
+</li>
+<li>
+<p>二阶段提交思想</p>
+<ul>
+<li>准备阶段
+<ul>
+<li>各个节点依据自身情况，响应“准备请求”中的提案</li>
+<li>若收到的提案编号小于等于 已收到的“准备请求”中最大的提案编号，则不响应</li>
+<li>若之前已经接受了某个提案，那么这次“准备请求”的响应中，会包含已经接受的最大编号的提案信息。（Proposer会根据响应处理接下来“接受请求”的提案值，如果大多数节点已经接受了一个一致的值，则以这个值为准。）</li>
+</ul>
+</li>
+<li>接受阶段
+<ul>
+<li>各个节点依据自身情况，接收“接受请求”中的提案</li>
+<li>若“接受请求”中提案编号小于已经响应的<strong>准备请求</strong>的提案编号，则会拒绝。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>大多数原则，而不是全部</p>
+<ul>
+<li>提供了一定的容错能力</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li>分布式系统
+<ul>
+<li>分布式系统是其组件分布在连网的计算机上，组件之间通过传递消息进行通信和协调的系统。</li>
+<li>三个特点：不共享内存（需要网络传输），不共享时钟，不共享操作系统</li>
+<li>三个问题：网络问题，时钟问题，部分失效partial failure</li>
+<li>请求结果存在三态：成功，失败，超时</li>
+<li>三大方向：分布式存储系统，分布式计算系统，分布式调度系统
+<ul>
+<li>各个方向都有一些特定的算法，但是分布式共识问题是分布式系统中最基本的问题：如何让分布式系统中的节点达成共识</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>共识
+<ul>
+<li>什么是共识</li>
+<li>为什么要达成共识</li>
+<li></li>
+</ul>
+</li>
+<li>拜占庭将军问题
+<ul>
+<li>分布式共识问题
+<ul>
+<li>什么是共识
+<ul>
+<li>系统中的多个节点对某个值达成一致</li>
+</ul>
+</li>
+<li>为什么要达成共识</li>
+</ul>
+</li>
+<li>容错算法分为两类</li>
+<li>有无恶意行为区分使用BFT还是CFT</li>
+</ul>
+</li>
+<li>Paxos是属于CFT的一种</li>
+<li>Paxos重要性
+<ul>
+<li>Chubby作者MikeBurrows说过，这世界上只有一种一致性共识算法，那就是Paxos</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>Paxos算法包含两部分</p>
+<ul>
+<li>
+<p>一个是Basic Paxos算法，描述多节点之间如何就一个值达成共识。</p>
+</li>
+<li>
+<p>一个是Multi Paxos思想，描述多个节点之间如何就一系列值达成共识。</p>
+</li>
+</ul>
+<p>先大致了解一下拜占庭将军问题。</p>
+<p>拜占庭将军问题（The Byzantine Generals Problem）是Lamport借助一个将军的故事来展现<strong>分布式共识问题</strong>，并且探讨和论证了解决的办法。可以认为拜占庭将军问题是分布式领域最复杂的一个容错模型，它提供了分布式共识问题的解决思路。</p>
+<p>简单说，拜占庭将军问题描述了一种分布式故障场景，除了存在**通信故障（crash fault）<strong>行为，还存在</strong>恶意行为（corrupt）**的一个场景。</p>
+<ul>
+<li>
+<p>通信故障crash fault：消息丢失，消息重复等</p>
+</li>
+<li>
+<p>恶意行为corrupt：篡改消息，伪造消息等</p>
+</li>
+</ul>
+<p>我们依据是否场景中是否存在恶意行为，可以将容错算法</p>
+<ul>
+<li>对于存在恶意行为的场景（如区块链），要解决共识问题，必须使用拜占庭容错算法（Byzantine Fault Tolerance，BFT）</li>
+<li>对于不存在恶意行为，只存在通信故障行为的场景，要解决共识问题，就可以使用非拜占庭容错算法，也就是故障容错算法（Crash Fault Tolerance, CFT）</li>
+</ul>
+<p>Paxos算法是CFT算法的一种，它解决的是当集群节点中不存在恶意行为（篡改，伪造信息），只可能出现通信故障（消息丢失，重复）情况下的共识问题。</p>
+<p>角色：Client, Proposer，Acceptor， Learner</p>
+<p>Proposal, proposal identified number,</p>
+<p>Basic Paxos是一个经典的两阶段提交。</p>
+<blockquote>
+<p>Phase 1<br>
+Phase 1a: Prepare<br>
+A Proposer creates a message, which we call a “Prepare”, identified with a number n. Note that n is not the value to be proposed and maybe agreed on, but just a number which uniquely identifies this initial message by the proposer (to be sent to the acceptors). The number n must be greater than any number used in any of the previous Prepare messages by this Proposer. Then, it sends the Prepare message containing n to a Quorum of Acceptors. Note that the Prepare message only contains the number n (that is, it does not have to contain e.g. the proposed value, often denoted by v). The Proposer decides who is in the Quorum[how?]. A Proposer should not initiate Paxos if it cannot communicate with at least a Quorum of Acceptors.</p>
+<p>一个Proposer创建一个Prepare消息，使用一个数组n唯一标识，记做Prepare[n,]。要注意，n不是被提议的值，只是一个数字，被proposer用来唯一标识这条初始消息（发往各个acceptor）的数字而已。数字n对于这个proposer而言，必须是递增的未被使用过的。然后这个Prepare[n]消息会被发往法定数量的acceptor。注意这个消息只携带数字n，并不包含提议值v。</p>
+<p>Phase 1b: Promise<br>
+Any of the Acceptors waits for a Prepare message from any of the Proposers. If an Acceptor receives a Prepare message, the Acceptor must look at the identifier number n of the just received Prepare message. There are two cases.<br>
+If n is higher than every previous proposal number received, from any of the Proposers, by the Acceptor, then the Acceptor must return a message, which we call a “Promise”, to the Proposer, to ignore all future proposals having a number less than n. If the Acceptor accepted a proposal at some point in the past, it must include the previous proposal number, say m, and the corresponding accepted value, say w, in its response to the Proposer.<br>
+Otherwise (that is, n is less than or equal to any previous proposal number received from any Proposer by the Acceptor) the Acceptor can ignore the received proposal. It does not have to answer in this case for Paxos to work. However, for the sake of optimization, sending a denial (Nack) response would tell the Proposer that it can stop its attempt to create consensus with proposal n.</p>
+<p>若一个Acceptor接收到了prepare[n,]消息，它会查看这个提案号n是否是它之前收到的所有消息中最大的，如果是，则会返回一个响应给proposer，记做promise[]。并且会忽略之后收到的提案号小于n的所有提案。如果这个aceeptor在之前接受了(accepted)一个提案[m,w]，那么promise响应就必须带上这个提案信息，记做promise[m,w]。</p>
+<p>否则，如果acceptor收到的提案号小于或等于之前收到的任何提案号，acceptor就会忽略掉这个消息。出于优化的考虑，acceptor会响应一个拒绝给proposer，让proposer不要再使用n作为提案号。</p>
+<p>Phase 2<br>
+Phase 2a: Accept<br>
+If a Proposer receives a majority of Promises from a Quorum of Acceptors, it needs to set a value v to its proposal. If any Acceptors had previously accepted any proposal, then they’ll have sent their values to the Proposer, who now must set the value of its proposal, v, to the value associated with the highest proposal number reported by the Acceptors, let’s call it z. If none of the Acceptors had accepted a proposal up to this point, then the Proposer may choose the value it originally wanted to propose, say x.[19]<br>
+The Proposer sends an Accept message, (n, v), to a Quorum of Acceptors with the chosen value for its proposal, v, and the proposal number n (which is the same as the number contained in the Prepare message previously sent to the Acceptors). So, the Accept message is either (n, v=z) or, in case none of the Acceptors previously accepted a value, (n, v=x).<br>
+This Accept message should be interpreted as a “request”, as in “Accept this proposal, please!”.</p>
+<p>如果一个proposer收到了大部分acceptor的promise消息，</p>
+<p>Phase 2b: Accepted<br>
+If an Acceptor receives an Accept message, (n, v), from a Proposer, it must accept it if and only if it has not already promised (in Phase 1b of the Paxos protocol) to only consider proposals having an identifier greater than n.<br>
+If the Acceptor has not already promised (in Phase 1b) to only consider proposals having an identifier greater than n, it should register the value v (of the just received Accept message) as the accepted value (of the Protocol), and send an Accepted message to the Proposer and every Learner (which can typically be the Proposers themselves).<br>
+Else, it can ignore the Accept message or request.<br>
+Note that an Acceptor can accept multiple proposals. This can happen when another Proposer, unaware of the new value being decided, starts a new round with a higher identification number n. In that case, the Acceptor can promise and later accept the new proposed value even though it has accepted another one earlier. These proposals may even have different values in the presence of certain failures[example needed]. However, the Paxos protocol will guarantee that the Acceptors will ultimately agree on a single value.</p>
+</blockquote>
+<p>第一阶段：</p>
+<ul>
+<li>prepare准备：proposer向acceptors提出一个提案</li>
+<li>promise承诺：acceptor承诺只接受最大提案号的提案</li>
+</ul>
+<p>第二阶段：</p>
+<ul>
+<li>accept</li>
+<li>accepted</li>
+</ul>
+<ol>
+<li>如果<strong>准备请求</strong>的提案编号，小于等于接受者已经响应的准备请求的提案编号，那么接受者将承诺不响应这个准备请求；</li>
+<li>如果<strong>接受请求</strong>中的提案的提案编号，小于接受者已经响应的<strong>准备请求</strong>的提案编号，那么接受者将承诺不通过这个提案；</li>
+<li>如果接受者之前有通过提案，那么接受者将承诺，会在<strong>准备请求</strong>的响应中，包含已经通过的最大编号的提案信息。</li>
+</ol>
+<p>怎么保障提案号不重复呢？</p>
+<p>可以通过独立单调递增、随机超时，来避免重复冲突，比如，可以参考Hashicorp Raft对CurrentTerm的实现。</p>
+<p>@Tung 目前看来，比较关键的就是提案编号的单调递增，以及大多数原则</p>
+<p>Paxos能保证一旦达成共识，后面除了提案编号变大之外，提案的值不变，而且2pc的第一阶段就能感知到已经通过的提案的信息。</p>
+<p>混淆了副本和共识的概念？，集群就某个提案形成大多数后达成了共识，但是副本不保证一致，在2f+1个节点的集群里，只要f+1个节点接受某个提案k，则就k达成共识，但是副本只保证至少f+1个是正确的提案，其余的节点上的提案不做保证。简单的说法是此时需要获取某个提案的话，需要从2f+1个节点上都获取一次，再确认集群提交的提案是哪个，才算是从集群的一次读取过程。</p>
+<p><img src="https://tximgcdn.tung7.com/BasicPaxos%E7%AE%97%E6%B3%95/BasicPaxos%E7%AE%97%E6%B3%95_20210807005639_357847.png" alt="image-20210807005634094"></p>
+]]></content>
+      <categories>
+        <category>日拱一卒</category>
+      </categories>
+      <tags>
+        <tag>分布式理论</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MultiPaxos思想</title>
     <url>/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/MultiPaxos%E6%80%9D%E6%83%B3.html</url>
     <content><![CDATA[<p>兰伯特Lamport提到的 Multi-Paxos 是<strong>一种思想</strong>，不是算法。</p>
@@ -3012,185 +3191,6 @@ B ----&gt; |No| E[End]
 </ul>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>日拱一卒</category>
-      </categories>
-      <tags>
-        <tag>分布式理论</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BasicPaxos算法</title>
-    <url>/%E6%97%A5%E6%8B%B1%E4%B8%80%E5%8D%92/BasicPaxos%E7%AE%97%E6%B3%95.html</url>
-    <content><![CDATA[<hr>
-<ul>
-<li>
-<p>CFT 非拜占庭容错算法， 故障容错算法</p>
-</li>
-<li>
-<p>目的</p>
-<ul>
-<li>多节点就某一个值达成共识</li>
-<li>达成了共识后，值就不会再变了，但如果我们想改变数据的值，可以实现状态机，和提议新的指令。</li>
-</ul>
-</li>
-<li>
-<p>三个角色</p>
-<ul>
-<li>Proposer，Acceptor，Learner</li>
-</ul>
-</li>
-<li>
-<p>单调递增的提案编号</p>
-<ul>
-<li>论文提到了思路。独立、递增、存储在可靠性设备中。具体细节实现，可以参考Hashicorp Raft的CurrentTerm的实现（Raft.setCurrentTerm()、raftState.getCurrentTerm()、raftState.setCurrentTerm()），原子、递增、持久存储。</li>
-</ul>
-</li>
-<li>
-<p>二阶段提交思想</p>
-<ul>
-<li>准备阶段
-<ul>
-<li>各个节点依据自身情况，响应“准备请求”中的提案</li>
-<li>若收到的提案编号小于等于 已收到的“准备请求”中最大的提案编号，则不响应</li>
-<li>若之前已经接受了某个提案，那么这次“准备请求”的响应中，会包含已经接受的最大编号的提案信息。（Proposer会根据响应处理接下来“接受请求”的提案值，如果大多数节点已经接受了一个一致的值，则以这个值为准。）</li>
-</ul>
-</li>
-<li>接受阶段
-<ul>
-<li>各个节点依据自身情况，接收“接受请求”中的提案</li>
-<li>若“接受请求”中提案编号小于已经响应的<strong>准备请求</strong>的提案编号，则会拒绝。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>大多数原则，而不是全部</p>
-<ul>
-<li>提供了一定的容错能力</li>
-</ul>
-</li>
-</ul>
-<hr>
-<ul>
-<li>分布式系统
-<ul>
-<li>分布式系统是其组件分布在连网的计算机上，组件之间通过传递消息进行通信和协调的系统。</li>
-<li>三个特点：不共享内存（需要网络传输），不共享时钟，不共享操作系统</li>
-<li>三个问题：网络问题，时钟问题，部分失效partial failure</li>
-<li>请求结果存在三态：成功，失败，超时</li>
-<li>三大方向：分布式存储系统，分布式计算系统，分布式调度系统
-<ul>
-<li>各个方向都有一些特定的算法，但是分布式共识问题是分布式系统中最基本的问题：如何让分布式系统中的节点达成共识</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>共识
-<ul>
-<li>什么是共识</li>
-<li>为什么要达成共识</li>
-<li></li>
-</ul>
-</li>
-<li>拜占庭将军问题
-<ul>
-<li>分布式共识问题
-<ul>
-<li>什么是共识
-<ul>
-<li>系统中的多个节点对某个值达成一致</li>
-</ul>
-</li>
-<li>为什么要达成共识</li>
-</ul>
-</li>
-<li>容错算法分为两类</li>
-<li>有无恶意行为区分使用BFT还是CFT</li>
-</ul>
-</li>
-<li>Paxos是属于CFT的一种</li>
-<li>Paxos重要性
-<ul>
-<li>Chubby作者MikeBurrows说过，这世界上只有一种一致性共识算法，那就是Paxos</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p>Paxos算法包含两部分</p>
-<ul>
-<li>
-<p>一个是Basic Paxos算法，描述多节点之间如何就一个值达成共识。</p>
-</li>
-<li>
-<p>一个是Multi Paxos思想，描述多个节点之间如何就一系列值达成共识。</p>
-</li>
-</ul>
-<p>先大致了解一下拜占庭将军问题。</p>
-<p>拜占庭将军问题（The Byzantine Generals Problem）是Lamport借助一个将军的故事来展现<strong>分布式共识问题</strong>，并且探讨和论证了解决的办法。可以认为拜占庭将军问题是分布式领域最复杂的一个容错模型，它提供了分布式共识问题的解决思路。</p>
-<p>简单说，拜占庭将军问题描述了一种分布式故障场景，除了存在**通信故障（crash fault）<strong>行为，还存在</strong>恶意行为（corrupt）**的一个场景。</p>
-<ul>
-<li>
-<p>通信故障crash fault：消息丢失，消息重复等</p>
-</li>
-<li>
-<p>恶意行为corrupt：篡改消息，伪造消息等</p>
-</li>
-</ul>
-<p>我们依据是否场景中是否存在恶意行为，可以将容错算法</p>
-<ul>
-<li>对于存在恶意行为的场景（如区块链），要解决共识问题，必须使用拜占庭容错算法（Byzantine Fault Tolerance，BFT）</li>
-<li>对于不存在恶意行为，只存在通信故障行为的场景，要解决共识问题，就可以使用非拜占庭容错算法，也就是故障容错算法（Crash Fault Tolerance, CFT）</li>
-</ul>
-<p>Paxos算法是CFT算法的一种，它解决的是当集群节点中不存在恶意行为（篡改，伪造信息），只可能出现通信故障（消息丢失，重复）情况下的共识问题。</p>
-<p>角色：Client, Proposer，Acceptor， Learner</p>
-<p>Proposal, proposal identified number,</p>
-<p>Basic Paxos是一个经典的两阶段提交。</p>
-<blockquote>
-<p>Phase 1<br>
-Phase 1a: Prepare<br>
-A Proposer creates a message, which we call a “Prepare”, identified with a number n. Note that n is not the value to be proposed and maybe agreed on, but just a number which uniquely identifies this initial message by the proposer (to be sent to the acceptors). The number n must be greater than any number used in any of the previous Prepare messages by this Proposer. Then, it sends the Prepare message containing n to a Quorum of Acceptors. Note that the Prepare message only contains the number n (that is, it does not have to contain e.g. the proposed value, often denoted by v). The Proposer decides who is in the Quorum[how?]. A Proposer should not initiate Paxos if it cannot communicate with at least a Quorum of Acceptors.</p>
-<p>一个Proposer创建一个Prepare消息，使用一个数组n唯一标识，记做Prepare[n,]。要注意，n不是被提议的值，只是一个数字，被proposer用来唯一标识这条初始消息（发往各个acceptor）的数字而已。数字n对于这个proposer而言，必须是递增的未被使用过的。然后这个Prepare[n]消息会被发往法定数量的acceptor。注意这个消息只携带数字n，并不包含提议值v。</p>
-<p>Phase 1b: Promise<br>
-Any of the Acceptors waits for a Prepare message from any of the Proposers. If an Acceptor receives a Prepare message, the Acceptor must look at the identifier number n of the just received Prepare message. There are two cases.<br>
-If n is higher than every previous proposal number received, from any of the Proposers, by the Acceptor, then the Acceptor must return a message, which we call a “Promise”, to the Proposer, to ignore all future proposals having a number less than n. If the Acceptor accepted a proposal at some point in the past, it must include the previous proposal number, say m, and the corresponding accepted value, say w, in its response to the Proposer.<br>
-Otherwise (that is, n is less than or equal to any previous proposal number received from any Proposer by the Acceptor) the Acceptor can ignore the received proposal. It does not have to answer in this case for Paxos to work. However, for the sake of optimization, sending a denial (Nack) response would tell the Proposer that it can stop its attempt to create consensus with proposal n.</p>
-<p>若一个Acceptor接收到了prepare[n,]消息，它会查看这个提案号n是否是它之前收到的所有消息中最大的，如果是，则会返回一个响应给proposer，记做promise[]。并且会忽略之后收到的提案号小于n的所有提案。如果这个aceeptor在之前接受了(accepted)一个提案[m,w]，那么promise响应就必须带上这个提案信息，记做promise[m,w]。</p>
-<p>否则，如果acceptor收到的提案号小于或等于之前收到的任何提案号，acceptor就会忽略掉这个消息。出于优化的考虑，acceptor会响应一个拒绝给proposer，让proposer不要再使用n作为提案号。</p>
-<p>Phase 2<br>
-Phase 2a: Accept<br>
-If a Proposer receives a majority of Promises from a Quorum of Acceptors, it needs to set a value v to its proposal. If any Acceptors had previously accepted any proposal, then they’ll have sent their values to the Proposer, who now must set the value of its proposal, v, to the value associated with the highest proposal number reported by the Acceptors, let’s call it z. If none of the Acceptors had accepted a proposal up to this point, then the Proposer may choose the value it originally wanted to propose, say x.[19]<br>
-The Proposer sends an Accept message, (n, v), to a Quorum of Acceptors with the chosen value for its proposal, v, and the proposal number n (which is the same as the number contained in the Prepare message previously sent to the Acceptors). So, the Accept message is either (n, v=z) or, in case none of the Acceptors previously accepted a value, (n, v=x).<br>
-This Accept message should be interpreted as a “request”, as in “Accept this proposal, please!”.</p>
-<p>如果一个proposer收到了大部分acceptor的promise消息，</p>
-<p>Phase 2b: Accepted<br>
-If an Acceptor receives an Accept message, (n, v), from a Proposer, it must accept it if and only if it has not already promised (in Phase 1b of the Paxos protocol) to only consider proposals having an identifier greater than n.<br>
-If the Acceptor has not already promised (in Phase 1b) to only consider proposals having an identifier greater than n, it should register the value v (of the just received Accept message) as the accepted value (of the Protocol), and send an Accepted message to the Proposer and every Learner (which can typically be the Proposers themselves).<br>
-Else, it can ignore the Accept message or request.<br>
-Note that an Acceptor can accept multiple proposals. This can happen when another Proposer, unaware of the new value being decided, starts a new round with a higher identification number n. In that case, the Acceptor can promise and later accept the new proposed value even though it has accepted another one earlier. These proposals may even have different values in the presence of certain failures[example needed]. However, the Paxos protocol will guarantee that the Acceptors will ultimately agree on a single value.</p>
-</blockquote>
-<p>第一阶段：</p>
-<ul>
-<li>prepare准备：proposer向acceptors提出一个提案</li>
-<li>promise承诺：acceptor承诺只接受最大提案号的提案</li>
-</ul>
-<p>第二阶段：</p>
-<ul>
-<li>accept</li>
-<li>accepted</li>
-</ul>
-<ol>
-<li>如果<strong>准备请求</strong>的提案编号，小于等于接受者已经响应的准备请求的提案编号，那么接受者将承诺不响应这个准备请求；</li>
-<li>如果<strong>接受请求</strong>中的提案的提案编号，小于接受者已经响应的<strong>准备请求</strong>的提案编号，那么接受者将承诺不通过这个提案；</li>
-<li>如果接受者之前有通过提案，那么接受者将承诺，会在<strong>准备请求</strong>的响应中，包含已经通过的最大编号的提案信息。</li>
-</ol>
-<p>怎么保障提案号不重复呢？</p>
-<p>可以通过独立单调递增、随机超时，来避免重复冲突，比如，可以参考Hashicorp Raft对CurrentTerm的实现。</p>
-<p>@Tung 目前看来，比较关键的就是提案编号的单调递增，以及大多数原则</p>
-<p>Paxos能保证一旦达成共识，后面除了提案编号变大之外，提案的值不变，而且2pc的第一阶段就能感知到已经通过的提案的信息。</p>
-<p>混淆了副本和共识的概念？，集群就某个提案形成大多数后达成了共识，但是副本不保证一致，在2f+1个节点的集群里，只要f+1个节点接受某个提案k，则就k达成共识，但是副本只保证至少f+1个是正确的提案，其余的节点上的提案不做保证。简单的说法是此时需要获取某个提案的话，需要从2f+1个节点上都获取一次，再确认集群提交的提案是哪个，才算是从集群的一次读取过程。</p>
-<p><img src="https://tximgcdn.tung7.com/BasicPaxos%E7%AE%97%E6%B3%95/BasicPaxos%E7%AE%97%E6%B3%95_20210807005639_357847.png" alt="image-20210807005634094"></p>
 ]]></content>
       <categories>
         <category>日拱一卒</category>
